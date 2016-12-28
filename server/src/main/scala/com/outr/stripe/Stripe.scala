@@ -9,6 +9,8 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import io.circe.generic.auto._
+
 class Stripe(apiKey: String) extends Logging {
   private val baseURL = "https://api.stripe.com/v1"
   private def url(endPoint: String): String = s"$baseURL/$endPoint"
@@ -18,7 +20,7 @@ class Stripe(apiKey: String) extends Logging {
       Pickler.read[Balance](response.body)
     }
 
-    def historyById(id: String, config: QueryConfig = QueryConfig.default): Future[BalanceTransaction] = {
+    /*def historyById(id: String, config: QueryConfig = QueryConfig.default): Future[BalanceTransaction] = {
       get(s"balance/history/$id", QueryConfig.default).map { response =>
         Pickler.read[BalanceTransaction](response.body)
       }
@@ -28,7 +30,7 @@ class Stripe(apiKey: String) extends Logging {
       get("balance/history", config).map { response =>
         Pickler.read[StripeList[BalanceTransaction]](response.body)
       }
-    }
+    }*/
   }
 
   private def get(endPoint: String,
@@ -65,13 +67,9 @@ class Stripe(apiKey: String) extends Logging {
   }
 }
 
-object Stripe extends Logging {
+object Stripe {
   val Version = "2016-07-06"
-
-  def main(args: Array[String]): Unit = {
-    val stripe = new Stripe("sk_test_BQokikJOvBiI2HlWgH4olfQ2")
-    val future = stripe.balance()
-    val balance = Await.result(future, 120.seconds)
-    logger.info(s"Balance: $balance")
-  }
 }
+
+case class Charge(id: String,
+                  `object`: String)

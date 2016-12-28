@@ -1,6 +1,8 @@
 package com.outr.stripe.balance
 
-case class FeeDetail(amount: BigDecimal,
+import com.outr.stripe.Money
+
+case class FeeDetail(amount: Money,
                      application: Option[String],
                      currency: String,
                      description: String,

@@ -1,15 +1,17 @@
 package com.outr.stripe.balance
 
+import com.outr.stripe.Money
+
 case class BalanceTransaction(id: String,
                               `object`: String,
-                              amount: BigDecimal,
+                              amount: Money,
                               availableOn: Long,
                               created: Long,
                               currency: String,
                               description: String,
-                              fee: BigDecimal,
+                              fee: Money,
                               feeDetails: List[FeeDetail],
-                              net: BigDecimal,
+                              net: Money,
                               source: String,
                               sourcedTransfers: SourcedTransfers,
                               status: String,

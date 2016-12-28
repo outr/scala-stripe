@@ -1,10 +1,11 @@
 package com.outr.stripe.balance
 
-// TODO: Add back commented out fields once upickle support
+import com.outr.stripe.Money
+
 case class Transfer(id: String,
-//                    `object`: String,
-                    amount: BigDecimal,
-                    amountReversed: BigDecimal,
+                    `object`: String,
+                    amount: Money,
+                    amountReversed: Money,
                     applicationFee: String,
                     balanceTransaction: String,
                     created: Long,
@@ -15,13 +16,13 @@ case class Transfer(id: String,
                     destinationPayment: Option[String],
                     failureCode: Option[String],
                     failureMessage: Option[String],
-//                    livemode: Boolean,
+                    livemode: Boolean,
                     metadata: Map[String, String],
                     method: String,
                     recipient: String,
                     reversals: List[Reversal],
                     reversed: Boolean,
-//                    sourceTransaction: Option[String],
+                    sourceTransaction: Option[String],
                     sourceType: String,
                     statementDescriptor: Option[String],
                     status: String,

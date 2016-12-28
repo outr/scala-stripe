@@ -1,8 +1,10 @@
 package com.outr.stripe.balance
 
+import com.outr.stripe.Money
+
 case class Reversal(id: String,
                     `object`: String,
-                    amount: BigDecimal,
+                    amount: Money,
                     balanceTransaction: String,
                     created: Long,
                     currency: String,
