@@ -28,7 +28,10 @@ lazy val client = project.in(file("client"))
 lazy val server = project.in(file("server"))
   .settings(
     name := "scala-stripe-server",
-    libraryDependencies += "com.outr" %%% "scribe-slf4j" % "1.2.6",
-    libraryDependencies += "org.scalactic" %%% "scalactic" % "3.0.1",
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
+    fork := true,
+    libraryDependencies += "com.outr" %% "scribe-slf4j" % "1.2.6",
+    libraryDependencies += "com.eed3si9n" %% "gigahorse-core" % "0.2-SNAPSHOT",
+    libraryDependencies += "com.lihaoyi" %% "upickle" % "0.4.4",
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
   )
