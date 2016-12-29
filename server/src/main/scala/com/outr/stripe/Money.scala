@@ -2,7 +2,13 @@ package com.outr.stripe
 
 import scala.math.BigDecimal.RoundingMode
 
-class Money private(value: BigDecimal) {
+class Money private(val value: BigDecimal) {
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case m: Money => m.value == value
+    case b: BigDecimal => b == value
+    case _ => false
+  }
+
   override def toString: String = f"$$$value%1.2f"
 }
 

@@ -8,12 +8,6 @@ object Pickler {
   private val entryRegex = """"(.+)": (.+)""".r
   private val snakeRegex = """_([a-z])""".r
 
-  implicit val moneyDecoder = new Decoder[Money] {
-    override def apply(c: HCursor): Result[Money] = {
-      Decoder.decodeLong(c).map(l => Money(l))
-    }
-  }
-
   def read[T](jsonString: String)(implicit decoder: Decoder[T]): T = {
     // Snake to Camel
     val json = entryRegex.replaceAllIn(jsonString, (regexMatch) => {

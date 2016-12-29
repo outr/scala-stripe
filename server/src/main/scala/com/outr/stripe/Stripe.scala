@@ -1,17 +1,15 @@
 package com.outr.stripe
 
 import com.outr.scribe.Logging
-import com.outr.stripe.balance.{Balance, BalanceTransaction}
+import com.outr.stripe.balance._
 import gigahorse.{Gigahorse, Realm, Response}
 
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
+import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import io.circe.generic.auto._
 
-class Stripe(apiKey: String) extends Logging {
+class Stripe(apiKey: String) extends Implicits with Logging {
   private val baseURL = "https://api.stripe.com/v1"
   private def url(endPoint: String): String = s"$baseURL/$endPoint"
 
@@ -20,7 +18,7 @@ class Stripe(apiKey: String) extends Logging {
       Pickler.read[Balance](response.body)
     }
 
-    /*def historyById(id: String, config: QueryConfig = QueryConfig.default): Future[BalanceTransaction] = {
+    def historyById(id: String, config: QueryConfig = QueryConfig.default): Future[BalanceTransaction] = {
       get(s"balance/history/$id", QueryConfig.default).map { response =>
         Pickler.read[BalanceTransaction](response.body)
       }
@@ -30,7 +28,7 @@ class Stripe(apiKey: String) extends Logging {
       get("balance/history", config).map { response =>
         Pickler.read[StripeList[BalanceTransaction]](response.body)
       }
-    }*/
+    }
   }
 
   private def get(endPoint: String,
