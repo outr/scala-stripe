@@ -5,6 +5,7 @@ import com.outr.stripe.balance._
 import com.outr.stripe.charge.{Card, Charge, FraudDetails, Shipping}
 import com.outr.stripe.customer.Customer
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence}
+import com.outr.stripe.event.Event
 import gigahorse.{Gigahorse, HttpVerbs, Realm, Response}
 
 import scala.collection.mutable.ListBuffer
@@ -247,6 +248,28 @@ class Stripe(apiKey: String) extends Implicits with Logging {
       ).flatten
       get("disputes", config, data: _*).map { response =>
         Pickler.read[StripeList[Dispute]](response.body)
+      }
+    }
+  }
+
+  object events {
+    def byId(eventId: String): Future[Event] = {
+      get(s"events/$eventId", QueryConfig.default).map { response =>
+        Pickler.read[Event](response.body)
+      }
+    }
+
+    def list(created: Option[TimestampFilter] = None,
+             `type`: Option[String] = None,
+             types: List[String] = Nil,
+             config: QueryConfig = QueryConfig.default): Future[StripeList[Event]] = {
+      val data = List(
+        created.map("created" -> Pickler.write[TimestampFilter](_)),
+        `type`.map("type" -> _),
+        if (types.nonEmpty) Some("types" -> Pickler.write[List[String]](types)) else None
+      ).flatten
+      get("events", config, data: _*).map { response =>
+        Pickler.read[StripeList[Event]](response.body)
       }
     }
   }
