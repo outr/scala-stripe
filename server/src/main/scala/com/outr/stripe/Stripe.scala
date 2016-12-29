@@ -4,6 +4,7 @@ import com.outr.scribe.Logging
 import com.outr.stripe.balance._
 import com.outr.stripe.charge.{Card, Charge, FraudDetails, Shipping}
 import com.outr.stripe.customer.Customer
+import com.outr.stripe.dispute.{Dispute, DisputeEvidence}
 import gigahorse.{Gigahorse, HttpVerbs, Realm, Response}
 
 import scala.collection.mutable.ListBuffer
@@ -210,6 +211,42 @@ class Stripe(apiKey: String) extends Implicits with Logging {
       ).flatten
       get("customers", config, data: _*).map { response =>
         Pickler.read[StripeList[Customer]](response.body)
+      }
+    }
+  }
+
+  object disputes {
+    def byId(disputeId: String): Future[Dispute] = {
+      get(s"disputes/$disputeId", QueryConfig.default).map { response =>
+        Pickler.read[Dispute](response.body)
+      }
+    }
+
+    def update(disputeId: String,
+               evidence: Option[DisputeEvidence] = None,
+               metadata: Option[Map[String, String]]): Future[Dispute] = {
+      val data = List(
+        evidence.map("evidence" -> Pickler.write[DisputeEvidence](_)),
+        metadata.map("metadata" -> Pickler.write[Map[String, String]](_))
+      ).flatten
+      post(s"disputes/$disputeId", QueryConfig.default, data: _*).map { response =>
+        Pickler.read[Dispute](response.body)
+      }
+    }
+
+    def close(disputeId: String): Future[Dispute] = {
+      post(s"disputes/$disputeId/close", QueryConfig.default).map { response =>
+        Pickler.read[Dispute](response.body)
+      }
+    }
+
+    def list(created: Option[TimestampFilter] = None,
+             config: QueryConfig = QueryConfig.default): Future[StripeList[Dispute]] = {
+      val data = List(
+        created.map("created" -> Pickler.write[TimestampFilter](_))
+      ).flatten
+      get("disputes", config, data: _*).map { response =>
+        Pickler.read[StripeList[Dispute]](response.body)
       }
     }
   }

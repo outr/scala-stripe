@@ -1,4 +1,4 @@
-package com.outr.stripe.charge
+package com.outr.stripe.dispute
 
 case class DisputeEvidence(accessActivityLog: Option[String],
                            billingAddress: Option[String],

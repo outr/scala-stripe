@@ -1,4 +1,4 @@
-package com.outr.stripe.charge
+package com.outr.stripe.dispute
 
 import com.outr.stripe.Money
 import com.outr.stripe.balance.BalanceTransaction
