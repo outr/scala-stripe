@@ -6,6 +6,8 @@ import io.circe._
 import io.circe.generic.semiauto._
 
 trait Implicits {
+  // Decoders
+
   implicit val moneyDecoder = new Decoder[Money] {
     override def apply(c: HCursor): Result[Money] = {
       Decoder.decodeLong(c).map(l => Money(l))
@@ -19,4 +21,10 @@ trait Implicits {
   implicit val sourcedTransfersDecoder: Decoder[SourcedTransfers] = deriveDecoder[SourcedTransfers]
   implicit val transferDecoder: Decoder[Transfer] = deriveDecoder[Transfer]
   implicit val reversalDecoder: Decoder[Reversal] = deriveDecoder[Reversal]
+
+  // Encoders
+
+  implicit val moneyEncoder: Encoder[Money] = new Encoder[Money] {
+    override def apply(a: Money): Json = Encoder.encodeLong(a.pennies)
+  }
 }

@@ -9,6 +9,8 @@ class Money private(val value: BigDecimal) {
     case _ => false
   }
 
+  def pennies: Long = (value * 100.0).toLongExact
+
   override def toString: String = f"$$$value%1.2f"
 }
 
