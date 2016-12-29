@@ -18,7 +18,7 @@ class BalanceSpec extends AsyncWordSpec with Matchers {
       }
     }
     "list most recent balance transaction history" in {
-      TestStripe.balance.history(config = QueryConfig(limit = 1)).map { list =>
+      TestStripe.balance.list(config = QueryConfig(limit = 1)).map { list =>
         list.`object` should be("list")
         list.url should be("/v1/balance/history")
         list.hasMore should be(true)
