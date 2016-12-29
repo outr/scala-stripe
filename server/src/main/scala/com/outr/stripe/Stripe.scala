@@ -6,6 +6,7 @@ import com.outr.stripe.charge.{Card, Charge, FraudDetails, Shipping}
 import com.outr.stripe.customer.Customer
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence}
 import com.outr.stripe.event.Event
+import com.outr.stripe.refund.Refund
 import gigahorse.{Gigahorse, HttpVerbs, Realm, Response}
 
 import scala.collection.mutable.ListBuffer
@@ -90,13 +91,13 @@ class Stripe(apiKey: String) extends Implicits with Logging {
     def update(chargeId: String,
                description: Option[String] = None,
                fraudDetails: Option[FraudDetails] = None,
-               metadata: Option[Map[String, String]] = None,
+               metadata: Map[String, String] = Map.empty,
                receiptEmail: Option[String] = None,
                shipping: Option[Shipping] = None): Future[Charge] = {
       val data = List(
         description.map("description" -> _),
         fraudDetails.map("fraud_details" -> Pickler.write[FraudDetails](_)),
-        metadata.map("metadata" -> Pickler.write[Map[String, String]](_)),
+        if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None,
         receiptEmail.map("receipt_email" -> _),
         shipping.map("shipping" -> Pickler.write[Shipping](_))
       ).flatten
@@ -142,7 +143,7 @@ class Stripe(apiKey: String) extends Implicits with Logging {
                coupon: Option[String] = None,
                description: Option[String] = None,
                email: Option[String] = None,
-               metadata: Option[Map[String, String]] = None,
+               metadata: Map[String, String] = Map.empty,
                plan: Option[String] = None,
                quantity: Option[Int] = None,
                shipping: Option[Shipping] = None,
@@ -155,7 +156,7 @@ class Stripe(apiKey: String) extends Implicits with Logging {
         coupon.map("coupon" -> _),
         description.map("description" -> _),
         email.map("email" -> _),
-        metadata.map("metadata" -> Pickler.write[Map[String, String]](_)),
+        if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None,
         plan.map("plan" -> _),
         quantity.map("quantity" -> _.toString),
         shipping.map("shipping" -> Pickler.write[Shipping](_)),
@@ -180,7 +181,7 @@ class Stripe(apiKey: String) extends Implicits with Logging {
                defaultSource: Option[String] = None,
                description: Option[String] = None,
                email: Option[String] = None,
-               metadata: Option[Map[String, String]] = None,
+               metadata: Map[String, String] = Map.empty,
                shipping: Option[Shipping] = None,
                source: Option[Card] = None): Future[Customer] = {
       val data = List(
@@ -190,7 +191,7 @@ class Stripe(apiKey: String) extends Implicits with Logging {
         defaultSource.map("default_source" -> _),
         description.map("description" -> _),
         email.map("email" -> _),
-        metadata.map("metadata" -> Pickler.write[Map[String, String]](_)),
+        if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None,
         shipping.map("shipping" -> Pickler.write[Shipping](_)),
         source.map("source" -> Pickler.write[Card](_))
       ).flatten
@@ -225,10 +226,10 @@ class Stripe(apiKey: String) extends Implicits with Logging {
 
     def update(disputeId: String,
                evidence: Option[DisputeEvidence] = None,
-               metadata: Option[Map[String, String]]): Future[Dispute] = {
+               metadata: Map[String, String]): Future[Dispute] = {
       val data = List(
         evidence.map("evidence" -> Pickler.write[DisputeEvidence](_)),
-        metadata.map("metadata" -> Pickler.write[Map[String, String]](_))
+        if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None
       ).flatten
       post(s"disputes/$disputeId", QueryConfig.default, data: _*).map { response =>
         Pickler.read[Dispute](response.body)
@@ -270,6 +271,51 @@ class Stripe(apiKey: String) extends Implicits with Logging {
       ).flatten
       get("events", config, data: _*).map { response =>
         Pickler.read[StripeList[Event]](response.body)
+      }
+    }
+  }
+
+  object refunds {
+    def create(chargeId: String,
+               amount: Option[Money] = None,
+               metadata: Map[String, String] = Map.empty,
+               reason: Option[String] = None,
+               refundApplicationFee: Boolean = false,
+               reverseTransfer: Boolean = false): Future[Refund] = {
+      val data = List(
+        amount.map("amount" -> Pickler.write[Money](_)),
+        if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None,
+        reason.map("reason" -> _),
+        if (refundApplicationFee) Some("refund_application_fee" -> "true") else None,
+        if (reverseTransfer) Some("reverse_transfer" -> "true") else None
+      ).flatten
+      post("refunds", QueryConfig.default, data: _*).map { response =>
+        Pickler.read[Refund](response.body)
+      }
+    }
+
+    def byId(refundId: String): Future[Refund] = {
+      get(s"refunds/$refundId", QueryConfig.default).map { response =>
+        Pickler.read[Refund](response.body)
+      }
+    }
+
+    def update(refundId: String, metadata: Map[String, String] = Map.empty): Future[Refund] = {
+      val data = List(
+        if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None
+      ).flatten
+      post(s"refunds/$refundId", QueryConfig.default, data: _*).map { response =>
+        Pickler.read[Refund](response.body)
+      }
+    }
+
+    def list(chargeId: Option[String] = None,
+             config: QueryConfig = QueryConfig.default): Future[StripeList[Refund]] = {
+      val data = List(
+        chargeId.map("charge" -> _)
+      ).flatten
+      get("refunds", config, data: _*).map { response =>
+        Pickler.read[StripeList[Refund]](response.body)
       }
     }
   }

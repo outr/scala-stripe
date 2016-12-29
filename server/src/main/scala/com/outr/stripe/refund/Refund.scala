@@ -1,4 +1,4 @@
-package com.outr.stripe.charge
+package com.outr.stripe.refund
 
 import com.outr.stripe.Money
 

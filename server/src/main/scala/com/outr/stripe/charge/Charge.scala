@@ -1,6 +1,7 @@
 package com.outr.stripe.charge
 
 import com.outr.stripe.dispute.Dispute
+import com.outr.stripe.refund.Refund
 import com.outr.stripe.{Money, StripeList}
 
 case class Charge(id: String,

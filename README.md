@@ -21,6 +21,7 @@ TODO
 * [ ] Stripe API Atlas
 * [ ] Stripe API Relay
 * [ ] Stripe API Radar
+* [ ] File Upload Support
 * [ ] Stripe.js Apple Pay functionality
 
 ## Features for 1.0.0 (In-Progress)

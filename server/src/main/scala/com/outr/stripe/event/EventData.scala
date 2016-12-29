@@ -1,3 +1,5 @@
 package com.outr.stripe.event
 
-case class EventData(`object`: String, previousAttributes: Map[String, Any])
+import io.circe.Json
+
+case class EventData(`object`: Json, previousAttributes: Map[String, String])

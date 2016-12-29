@@ -1,6 +1,7 @@
 package com.outr.stripe
 
 import com.outr.stripe.balance.{Balance, BalanceEntry, BalanceTransaction, FeeDetail, Reversal, SourceType, SourcedTransfers, Transfer}
+import com.outr.stripe.event.{Event, EventData}
 import io.circe.Decoder.Result
 import io.circe._
 import io.circe.generic.semiauto._
@@ -21,6 +22,8 @@ trait Implicits {
   implicit val sourcedTransfersDecoder: Decoder[SourcedTransfers] = deriveDecoder[SourcedTransfers]
   implicit val transferDecoder: Decoder[Transfer] = deriveDecoder[Transfer]
   implicit val reversalDecoder: Decoder[Reversal] = deriveDecoder[Reversal]
+  implicit val eventDecoder: Decoder[Event] = deriveDecoder[Event]
+  implicit val eventDataDecoder: Decoder[EventData] = deriveDecoder[EventData]
 
   // Encoders
 
