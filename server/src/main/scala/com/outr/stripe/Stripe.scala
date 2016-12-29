@@ -2,11 +2,12 @@ package com.outr.stripe
 
 import com.outr.scribe.Logging
 import com.outr.stripe.balance._
-import com.outr.stripe.charge.{Card, Charge, FraudDetails, Shipping}
+import com.outr.stripe.charge.{BankAccount, Card, Charge, FraudDetails, PII, Shipping}
 import com.outr.stripe.customer.Customer
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence}
 import com.outr.stripe.event.Event
 import com.outr.stripe.refund.Refund
+import com.outr.stripe.token.Token
 import gigahorse.{Gigahorse, HttpVerbs, Realm, Response}
 
 import scala.collection.mutable.ListBuffer
@@ -316,6 +317,29 @@ class Stripe(apiKey: String) extends Implicits with Logging {
       ).flatten
       get("refunds", config, data: _*).map { response =>
         Pickler.read[StripeList[Refund]](response.body)
+      }
+    }
+  }
+
+  object tokens {
+    def create(card: Option[Card] = None,
+               bankAccount: Option[BankAccount] = None,
+               pii: Option[PII] = None,
+               customerId: Option[String] = None): Future[Token] = {
+      val data = List(
+        card.map("card" -> Pickler.write(_)),
+        bankAccount.map("bank_account" -> Pickler.write(_)),
+        pii.map("pii" -> Pickler.write(_)),
+        customerId.map("customer" -> _)
+      ).flatten
+      post("tokens", QueryConfig.default, data: _*).map { response =>
+        Pickler.read[Token](response.body)
+      }
+    }
+
+    def byId(tokenId: String): Future[Token] = {
+      get(s"tokens/$tokenId", QueryConfig.default).map { response =>
+        Pickler.read[Token](response.body)
       }
     }
   }
