@@ -51,8 +51,7 @@ TODO
     * [X] Account
     * [X] Application Fees
     * [X] Application Fee Refunds
-    * [ ] Recipients
-    * [ ] Country Specs
+    * [X] Country Specs
     * [ ] External Accounts
 * [ ] Stripe API Payments
     * [ ] Alipay Accounts

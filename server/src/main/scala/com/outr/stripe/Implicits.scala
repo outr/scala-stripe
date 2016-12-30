@@ -2,7 +2,7 @@ package com.outr.stripe
 
 import com.outr.stripe.balance.{Balance, BalanceEntry, BalanceTransaction, FeeDetail, Reversal, SourceType}
 import com.outr.stripe.charge.{Address, BankAccount, Card, Charge, FraudDetails, Outcome, PII, Rule, Shipping}
-import com.outr.stripe.connect.{Acceptance, Account, ApplicationFee, DeclineChargesOn, FeeRefund, LegalEntity, TransferSchedule}
+import com.outr.stripe.connect.{Acceptance, Account, ApplicationFee, CountrySpec, DeclineChargesOn, FeeRefund, LegalEntity, TransferSchedule}
 import com.outr.stripe.customer.{Customer, Discount}
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence, EvidenceDetails}
 import com.outr.stripe.event.{Event, EventData}
@@ -68,6 +68,8 @@ trait Implicits {
   implicit val applicationFeeListDecoder: Decoder[StripeList[ApplicationFee]] = deriveDecoder[StripeList[ApplicationFee]]
   implicit val feeRefundDecoder: Decoder[FeeRefund] = deriveDecoder[FeeRefund]
   implicit val feeRefundListDecoder: Decoder[StripeList[FeeRefund]] = deriveDecoder[StripeList[FeeRefund]]
+  implicit val countrySpecDecoder: Decoder[CountrySpec] = deriveDecoder[CountrySpec]
+  implicit val countrySpecListDecoder: Decoder[StripeList[CountrySpec]] = deriveDecoder[StripeList[CountrySpec]]
 
   // Encoders
 
