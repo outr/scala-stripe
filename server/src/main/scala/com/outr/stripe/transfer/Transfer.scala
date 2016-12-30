@@ -1,12 +1,13 @@
-package com.outr.stripe.balance
+package com.outr.stripe.transfer
 
-import com.outr.stripe.Money
+import com.outr.stripe.balance.Reversal
+import com.outr.stripe.{Money, StripeList}
 
 case class Transfer(id: String,
                     `object`: String,
                     amount: Money,
                     amountReversed: Money,
-                    applicationFee: String,
+                    applicationFee: Option[String],
                     balanceTransaction: String,
                     created: Long,
                     currency: String,
@@ -20,7 +21,7 @@ case class Transfer(id: String,
                     metadata: Map[String, String],
                     method: String,
                     recipient: String,
-                    reversals: List[Reversal],
+                    reversals: StripeList[Reversal],
                     reversed: Boolean,
                     sourceTransaction: Option[String],
                     sourceType: String,

@@ -1,6 +1,7 @@
 package com.outr.stripe.balance
 
 import com.outr.stripe.Money
+import com.outr.stripe.transfer.SourcedTransfers
 
 case class BalanceTransaction(id: String,
                               `object`: String,
