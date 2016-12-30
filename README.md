@@ -49,8 +49,8 @@ TODO
     * [X] Transfer Reversals
 * [ ] Stripe API Connect
     * [X] Account
-    * [ ] Application Fee Refunds
-    * [ ] Application Fees
+    * [X] Application Fees
+    * [X] Application Fee Refunds
     * [ ] Recipients
     * [ ] Country Specs
     * [ ] External Accounts
