@@ -47,12 +47,12 @@ TODO
     * [X] Tokens
     * [X] Transfers
     * [X] Transfer Reversals
-* [ ] Stripe API Connect
+* [X] Stripe API Connect
     * [X] Account
     * [X] Application Fees
     * [X] Application Fee Refunds
     * [X] Country Specs
-    * [ ] External Accounts
+    * [X] External Accounts
 * [ ] Stripe API Payments
     * [ ] Alipay Accounts
     * [ ] Bank Accounts
