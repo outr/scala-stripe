@@ -1,0 +1,35 @@
+package com.outr.stripe.connect
+
+import com.outr.stripe.StripeList
+import io.circe.Json
+
+case class Account(id: String,
+                   `object`: String,
+                   businessLogo: Option[String],
+                   businessName: String,
+                   businessPrimaryColor: Option[String],
+                   businessUrl: Option[String],
+                   chargesEnabled: Boolean,
+                   country: String,
+                   debitNegativeBalances: Boolean,
+                   declineChargesOn: DeclineChargesOn,
+                   defaultCurrency: String,
+                   detailsSubmitted: Boolean,
+                   displayName: String,
+                   email: String,
+                   externalAccounts: StripeList[Json],
+                   legalEntity: LegalEntity,
+                   managed: Boolean,
+                   metadata: Map[String, String],
+                   productDescription: String,
+                   statementDescriptor: String,
+                   supportEmail: Option[String],
+                   supportPhone: Option[String],
+                   supportUrl: Option[String],
+                   timezone: String,
+                   tosAcceptance: Acceptance,
+                   transferSchedule: TransferSchedule,
+                   transferStatementDescriptor: Option[String],
+                   transfersEnabled: Boolean,
+                   verification: AccountVerification,
+                   keys: Option[Keys])

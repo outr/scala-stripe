@@ -34,6 +34,9 @@ TODO
 ## Features for 1.0.0 (In-Progress)
 
 * [X] Stripe.js functionality in Scala.js (Excludes Apple Pay)
+    * [X] Card
+    * [X] Bank Account
+    * [X] Personally Identifiable Information (PII)
 * [X] Stripe API Core Resources
     * [X] Balance
     * [X] Charges
@@ -45,7 +48,7 @@ TODO
     * [X] Transfers
     * [X] Transfer Reversals
 * [ ] Stripe API Connect
-    * [ ] Account
+    * [X] Account
     * [ ] Application Fee Refunds
     * [ ] Application Fees
     * [ ] Recipients

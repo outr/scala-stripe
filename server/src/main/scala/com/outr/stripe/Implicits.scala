@@ -2,6 +2,7 @@ package com.outr.stripe
 
 import com.outr.stripe.balance.{Balance, BalanceEntry, BalanceTransaction, FeeDetail, Reversal, SourceType}
 import com.outr.stripe.charge.{Address, BankAccount, Card, Charge, FraudDetails, Outcome, PII, Rule, Shipping}
+import com.outr.stripe.connect.{Acceptance, Account, DeclineChargesOn, LegalEntity, TransferSchedule}
 import com.outr.stripe.customer.{Customer, Discount}
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence, EvidenceDetails}
 import com.outr.stripe.event.{Event, EventData}
@@ -61,6 +62,8 @@ trait Implicits {
   implicit val planDecoder: Decoder[Plan] = deriveDecoder[Plan]
   implicit val transferReversalDecoder: Decoder[TransferReversal] = deriveDecoder[TransferReversal]
   implicit val transferReversalListDecoder: Decoder[StripeList[TransferReversal]] = deriveDecoder[StripeList[TransferReversal]]
+  implicit val accountDecoder: Decoder[Account] = deriveDecoder[Account]
+  implicit val accountListDecoder: Decoder[StripeList[Account]] = deriveDecoder[StripeList[Account]]
 
   // Encoders
 
@@ -75,4 +78,8 @@ trait Implicits {
   implicit val shippingEncoder: Encoder[Shipping] = deriveEncoder[Shipping]
   implicit val fraudDetailsEncoder: Encoder[FraudDetails] = deriveEncoder[FraudDetails]
   implicit val addressEncoder: Encoder[Address] = deriveEncoder[Address]
+  implicit val transferScheduleEncoder: Encoder[TransferSchedule] = deriveEncoder[TransferSchedule]
+  implicit val acceptanceEncoder: Encoder[Acceptance] = deriveEncoder[Acceptance]
+  implicit val legalEntityEncoder: Encoder[LegalEntity] = deriveEncoder[LegalEntity]
+  implicit val declineChargesOnEncoder: Encoder[DeclineChargesOn] = deriveEncoder[DeclineChargesOn]
 }
