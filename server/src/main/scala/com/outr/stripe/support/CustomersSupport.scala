@@ -85,4 +85,9 @@ class CustomersSupport(stripe: Stripe) extends Implicits {
       Pickler.read[StripeList[Customer]](response.body)
     }
   }
+
+  object sources {
+    lazy val bankAccounts: CustomerBankAccountsSupport = new CustomerBankAccountsSupport(stripe)
+    lazy val cards: CustomerCreditCardsSupport = new CustomerCreditCardsSupport(stripe)
+  }
 }

@@ -28,6 +28,9 @@ TODO
     * [ ] Reviews
 * [ ] Stripe API Core Resources
     * [ ] File Uploads
+* [ ] Stripe API Payments
+    * [ ] Alipay Accounts
+    * [ ] Sources
 * [ ] Stripe.js
     * [ ] Apple Pay
 
@@ -53,11 +56,9 @@ TODO
     * [X] Application Fee Refunds
     * [X] Country Specs
     * [X] External Accounts
-* [ ] Stripe API Payments
-    * [ ] Alipay Accounts
-    * [ ] Bank Accounts
-    * [ ] Cards
-    * [ ] Sources
+* [X] Stripe API Payments
+    * [X] Bank Accounts
+    * [X] Cards
 * [ ] Stripe API Subscriptions
     * [ ] Coupons
     * [ ] Discounts

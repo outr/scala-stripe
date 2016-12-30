@@ -91,7 +91,7 @@ class AccountsSupport(stripe: Stripe) extends Implicits {
   }
 
   object external {
-    lazy val bankAccounts = new BankAccountsSupport(stripe)
-    lazy val cards = new CreditCardsSupport(stripe)
+    lazy val bankAccounts = new ExternalBankAccountsSupport(stripe)
+    lazy val cards = new ExternalCreditCardsSupport(stripe)
   }
 }

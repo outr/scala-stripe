@@ -6,7 +6,7 @@ import com.outr.stripe.{Deleted, Implicits, Pickler, QueryConfig, Stripe, Stripe
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CreditCardsSupport(stripe: Stripe) extends Implicits {
+class ExternalCreditCardsSupport(stripe: Stripe) extends Implicits {
   def create(accountId: String,
              source: Option[String] = None,
              externalAccount: Option[String] = None,
