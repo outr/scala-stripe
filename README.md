@@ -43,7 +43,7 @@ TODO
     * [X] Refunds
     * [X] Tokens
     * [X] Transfers
-    * [ ] Transfer Reversals
+    * [X] Transfer Reversals
 * [ ] Stripe API Connect
     * [ ] Account
     * [ ] Application Fee Refunds

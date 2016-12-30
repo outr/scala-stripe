@@ -8,7 +8,7 @@ import com.outr.stripe.event.{Event, EventData}
 import com.outr.stripe.refund.Refund
 import com.outr.stripe.subscription.{Coupon, Plan, Subscription}
 import com.outr.stripe.token.Token
-import com.outr.stripe.transfer.{SourcedTransfers, Transfer}
+import com.outr.stripe.transfer.{SourcedTransfers, Transfer, TransferReversal}
 import io.circe.Decoder.Result
 import io.circe._
 import io.circe.generic.semiauto._
@@ -59,6 +59,8 @@ trait Implicits {
   implicit val bankAccountDecoder: Decoder[BankAccount] = deriveDecoder[BankAccount]
   implicit val subscriptionListDecoder: Decoder[StripeList[Subscription]] = deriveDecoder[StripeList[Subscription]]
   implicit val planDecoder: Decoder[Plan] = deriveDecoder[Plan]
+  implicit val transferReversalDecoder: Decoder[TransferReversal] = deriveDecoder[TransferReversal]
+  implicit val transferReversalListDecoder: Decoder[StripeList[TransferReversal]] = deriveDecoder[StripeList[TransferReversal]]
 
   // Encoders
 

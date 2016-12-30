@@ -69,4 +69,6 @@ class TransfersSupport(stripe: Stripe) extends Implicits {
       Pickler.read[StripeList[Transfer]](response.body)
     }
   }
+
+  lazy val reversals: TransferReversalsSupport = new TransferReversalsSupport(stripe)
 }
