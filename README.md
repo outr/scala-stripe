@@ -34,7 +34,7 @@ TODO
 ## Features for 1.0.0 (In-Progress)
 
 * [X] Stripe.js functionality in Scala.js (Excludes Apple Pay)
-* [ ] Stripe API Core Resources
+* [X] Stripe API Core Resources
     * [X] Balance
     * [X] Charges
     * [X] Customers
