@@ -18,16 +18,48 @@ TODO
 
 ## Features for 2.0.0 (Future)
 
-* [ ] Stripe API Atlas
 * [ ] Stripe API Relay
+    * [ ] Orders
+    * [ ] Order Items
+    * [ ] Returns
+    * [ ] Products
+    * [ ] SKUs
 * [ ] Stripe API Radar
-* [ ] File Upload Support
-* [ ] Stripe.js Apple Pay functionality
+    * [ ] Reviews
+* [ ] Stripe API Core Resources
+    * [ ] File Uploads
+* [ ] Stripe.js
+    * [ ] Apple Pay
 
 ## Features for 1.0.0 (In-Progress)
 
 * [X] Stripe.js functionality in Scala.js (Excludes Apple Pay)
 * [ ] Stripe API Core Resources
-* [ ] Stripe API Payments
+    * [X] Balance
+    * [X] Charges
+    * [X] Customers
+    * [X] Disputes
+    * [X] Events
+    * [X] Refunds
+    * [X] Tokens
+    * [X] Transfers
+    * [ ] Transfer Reversals
 * [ ] Stripe API Connect
+    * [ ] Account
+    * [ ] Application Fee Refunds
+    * [ ] Application Fees
+    * [ ] Recipients
+    * [ ] Country Specs
+    * [ ] External Accounts
+* [ ] Stripe API Payments
+    * [ ] Alipay Accounts
+    * [ ] Bank Accounts
+    * [ ] Cards
+    * [ ] Sources
 * [ ] Stripe API Subscriptions
+    * [ ] Coupons
+    * [ ] Discounts
+    * [ ] Invoices
+    * [ ] Invoice Items
+    * [ ] Plans
+    * [ ] Subscriptions
