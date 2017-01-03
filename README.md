@@ -59,10 +59,10 @@ TODO
 * [X] Stripe API Payments
     * [X] Bank Accounts
     * [X] Cards
-* [ ] Stripe API Subscriptions
+* [X] Stripe API Subscriptions
     * [X] Coupons
     * [X] Discounts
     * [X] Invoices
     * [X] Invoice Items
     * [X] Plans
-    * [ ] Subscriptions
+    * [X] Subscriptions
