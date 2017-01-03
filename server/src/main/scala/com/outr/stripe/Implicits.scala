@@ -56,6 +56,7 @@ trait Implicits {
   implicit val evidenceDetailsDecoder: Decoder[EvidenceDetails] = deriveDecoder[EvidenceDetails]
   implicit val discountDecoder: Decoder[Discount] = deriveDecoder[Discount]
   implicit val couponDecoder: Decoder[Coupon] = deriveDecoder[Coupon]
+  implicit val couponListDecoder: Decoder[StripeList[Coupon]] = deriveDecoder[StripeList[Coupon]]
   implicit val cardDecoder: Decoder[Card] = deriveDecoder[Card]
   implicit val cardListDecoder: Decoder[StripeList[Card]] = deriveDecoder[StripeList[Card]]
   implicit val bankAccountDecoder: Decoder[BankAccount] = deriveDecoder[BankAccount]
