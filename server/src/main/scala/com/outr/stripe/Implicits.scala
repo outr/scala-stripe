@@ -63,6 +63,7 @@ trait Implicits {
   implicit val bankAccountListDecoder: Decoder[StripeList[BankAccount]] = deriveDecoder[StripeList[BankAccount]]
   implicit val subscriptionListDecoder: Decoder[StripeList[Subscription]] = deriveDecoder[StripeList[Subscription]]
   implicit val planDecoder: Decoder[Plan] = deriveDecoder[Plan]
+  implicit val planListDecoder: Decoder[StripeList[Plan]] = deriveDecoder[StripeList[Plan]]
   implicit val transferReversalDecoder: Decoder[TransferReversal] = deriveDecoder[TransferReversal]
   implicit val transferReversalListDecoder: Decoder[StripeList[TransferReversal]] = deriveDecoder[StripeList[TransferReversal]]
   implicit val accountDecoder: Decoder[Account] = deriveDecoder[Account]

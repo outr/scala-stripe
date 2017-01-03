@@ -64,5 +64,5 @@ TODO
     * [X] Discounts
     * [X] Invoices
     * [X] Invoice Items
-    * [ ] Plans
+    * [X] Plans
     * [ ] Subscriptions
