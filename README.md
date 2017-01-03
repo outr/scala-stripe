@@ -62,7 +62,7 @@ TODO
 * [ ] Stripe API Subscriptions
     * [X] Coupons
     * [X] Discounts
-    * [ ] Invoices
-    * [ ] Invoice Items
+    * [X] Invoices
+    * [X] Invoice Items
     * [ ] Plans
     * [ ] Subscriptions
