@@ -60,8 +60,8 @@ TODO
     * [X] Bank Accounts
     * [X] Cards
 * [ ] Stripe API Subscriptions
-    * [ ] Coupons
-    * [ ] Discounts
+    * [X] Coupons
+    * [X] Discounts
     * [ ] Invoices
     * [ ] Invoice Items
     * [ ] Plans
