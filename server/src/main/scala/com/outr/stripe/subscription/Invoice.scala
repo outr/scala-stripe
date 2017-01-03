@@ -1,0 +1,37 @@
+package com.outr.stripe.subscription
+
+import com.outr.stripe.{Money, StripeList}
+import com.outr.stripe.customer.Discount
+
+case class Invoice(id: String,
+                   `object`: String,
+                   amountDue: Money,
+                   applicationFee: Option[Money],
+                   attemptCount: Int,
+                   attempted: Boolean,
+                   charge: Option[String],
+                   closed: Boolean,
+                   currency: String,
+                   customer: String,
+                   date: Long,
+                   description: Option[String],
+                   discount: Option[Discount],
+                   endingBalance: Option[Money],
+                   forgiven: Boolean,
+                   lines: StripeList[InvoiceLine],
+                   livemode: Boolean,
+                   metadata: Map[String, String],
+                   nextPaymentAttempt: Option[Long],
+                   paid: Boolean,
+                   periodEnd: Long,
+                   periodStart: Long,
+                   receiptNumber: Option[String],
+                   startingBalance: Money,
+                   statementDescriptor: Option[String],
+                   subscription: Option[String],
+                   subscriptionProrationDate: Option[Int],
+                   subtotal: Money,
+                   tax: Option[Money],
+                   taxPercent: Option[BigDecimal],
+                   total: Money,
+                   webhooksDeliveredAt: Option[Long])

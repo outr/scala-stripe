@@ -20,6 +20,7 @@ class Stripe(val apiKey: String) extends Restful with Implicits with Logging {
   lazy val countrySpecs: CountrySpecsSupport = new CountrySpecsSupport(this)
   lazy val coupons: CouponsSupport = new CouponsSupport(this)
   lazy val discounts: DiscountSupport = new DiscountSupport(this)
+  lazy val invoices: InvoicesSupport = new InvoicesSupport(this)
 }
 
 object Stripe {

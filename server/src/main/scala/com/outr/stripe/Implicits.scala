@@ -7,7 +7,7 @@ import com.outr.stripe.customer.{Customer, Discount}
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence, EvidenceDetails}
 import com.outr.stripe.event.{Event, EventData}
 import com.outr.stripe.refund.Refund
-import com.outr.stripe.subscription.{Coupon, Plan, Subscription}
+import com.outr.stripe.subscription.{Coupon, Invoice, InvoiceLine, Plan, Subscription}
 import com.outr.stripe.token.Token
 import com.outr.stripe.transfer.{SourcedTransfers, Transfer, TransferReversal}
 import io.circe.Decoder.Result
@@ -73,6 +73,10 @@ trait Implicits {
   implicit val feeRefundListDecoder: Decoder[StripeList[FeeRefund]] = deriveDecoder[StripeList[FeeRefund]]
   implicit val countrySpecDecoder: Decoder[CountrySpec] = deriveDecoder[CountrySpec]
   implicit val countrySpecListDecoder: Decoder[StripeList[CountrySpec]] = deriveDecoder[StripeList[CountrySpec]]
+  implicit val invoiceDecoder: Decoder[Invoice] = deriveDecoder[Invoice]
+  implicit val invoiceListDecoder: Decoder[StripeList[Invoice]] = deriveDecoder[StripeList[Invoice]]
+  implicit val invoiceLineDecoder: Decoder[InvoiceLine] = deriveDecoder[InvoiceLine]
+  implicit val invoiceLineListDecoder: Decoder[StripeList[InvoiceLine]] = deriveDecoder[StripeList[InvoiceLine]]
 
   // Encoders
 
