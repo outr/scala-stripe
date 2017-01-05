@@ -25,5 +25,6 @@ case class LegalEntity(address: Option[Address],
                        personalIdNumberProvided: Option[Boolean],
                        phoneNumber: Option[String],
                        ssnLast4Provided: Option[Boolean],
+                       sslLast4: Option[Int],
                        `type`: String,
                        verification: Verification)

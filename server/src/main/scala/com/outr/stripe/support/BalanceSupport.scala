@@ -1,21 +1,18 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.{Implicits, Pickler, QueryConfig, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.{Implicits, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 import com.outr.stripe.balance.{Balance, BalanceTransaction}
 
 import scala.concurrent.Future
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class BalanceSupport(stripe: Stripe) extends Implicits {
-  def apply(): Future[Balance] = stripe.get("balance", QueryConfig.default).map { response =>
-    Pickler.read[Balance](response.body)
+  def apply(): Future[Either[ResponseError, Balance]] = {
+    stripe.get[Balance]("balance", QueryConfig.default)
   }
 
-  def byId(id: String, config: QueryConfig = QueryConfig.default): Future[BalanceTransaction] = {
-    stripe.get(s"balance/history/$id", QueryConfig.default).map { response =>
-      Pickler.read[BalanceTransaction](response.body)
-    }
+  def byId(id: String, config: QueryConfig = QueryConfig.default): Future[Either[ResponseError, BalanceTransaction]] = {
+    stripe.get[BalanceTransaction](s"balance/history/$id", QueryConfig.default)
   }
 
   def list(availableOn: Option[TimestampFilter] = None,
@@ -24,17 +21,15 @@ class BalanceSupport(stripe: Stripe) extends Implicits {
            source: Option[String] = None,
            transfer: Option[String] = None,
            `type`: Option[String] = None,
-           config: QueryConfig = QueryConfig.default): Future[StripeList[BalanceTransaction]] = {
+           config: QueryConfig = QueryConfig.default): Future[Either[ResponseError, StripeList[BalanceTransaction]]] = {
     val data = List(
-      availableOn.map("available_on" -> Pickler.write[TimestampFilter](_)),
-      created.map("created" -> Pickler.write[TimestampFilter](_)),
-      currency.map("currency" -> _),
-      source.map("source" -> _),
-      transfer.map("transfer" -> _),
-      `type`.map("type" -> _)
+      write("available_on", availableOn),
+      write("created", created),
+      write("currency", currency),
+      write("source", source),
+      write("transfer", transfer),
+      write("type", `type`)
     ).flatten
-    stripe.get("balance/history", config, data: _*).map { response =>
-      Pickler.read[StripeList[BalanceTransaction]](response.body)
-    }
+    stripe.get[StripeList[BalanceTransaction]]("balance/history", config, data: _*)
   }
 }

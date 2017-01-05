@@ -1,7 +1,7 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.transfer.Transfer
-import com.outr.stripe.{Implicits, Money, Pickler, QueryConfig, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.{Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -16,40 +16,34 @@ class TransfersSupport(stripe: Stripe) extends Implicits {
              sourceTransaction: Option[String] = None,
              statementDescriptor: Option[String] = None,
              sourceType: String = "card",
-             method: String = "standard"): Future[Transfer] = {
+             method: String = "standard"): Future[Either[ResponseError, Transfer]] = {
     val data = List(
-      Some("amount" -> Pickler.write(amount)),
-      Some("currency" -> currency),
-      Some("destination" -> destination),
-      applicationFee.map("application_fee" -> Pickler.write(_)),
-      description.map("description" -> _),
-      if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None,
-      sourceTransaction.map("source_transaction" -> _),
-      statementDescriptor.map("statement_descriptor" -> _),
-      if (sourceType != "card") Some("source_type" -> sourceType) else None,
-      if (method != "standard") Some("method" -> method) else None
+      write("amount", amount),
+      write("currency", currency),
+      write("destination", destination),
+      write("application_fee", applicationFee),
+      write("description", description),
+      write("metadata", metadata),
+      write("source_transaction", sourceTransaction),
+      write("statement_descriptor", statementDescriptor),
+      write("source_type", if (sourceType != "card") Some(sourceType) else None),
+      write("method", if (method != "standard") Some(method) else None)
     ).flatten
-    stripe.post("transfers", QueryConfig.default, data: _*).map { response =>
-      Pickler.read[Transfer](response.body)
-    }
+    stripe.post[Transfer]("transfers", QueryConfig.default, data: _*)
   }
 
-  def byId(transferId: String): Future[Transfer] = {
-    stripe.get(s"transfers/$transferId", QueryConfig.default).map { response =>
-      Pickler.read[Transfer](response.body)
-    }
+  def byId(transferId: String): Future[Either[ResponseError, Transfer]] = {
+    stripe.get[Transfer](s"transfers/$transferId", QueryConfig.default)
   }
 
   def update(transferId: String,
              description: Option[String] = None,
-             metadata: Map[String, String] = Map.empty): Future[Transfer] = {
+             metadata: Map[String, String] = Map.empty): Future[Either[ResponseError, Transfer]] = {
     val data = List(
-      description.map("description" -> _),
-      if (metadata.nonEmpty) Some("metadata" -> Pickler.write[Map[String, String]](metadata)) else None
+      write("description", description),
+      write("metadata", metadata)
     ).flatten
-    stripe.post(s"transfers/$transferId", QueryConfig.default, data: _*).map { response =>
-      Pickler.read[Transfer](response.body)
-    }
+    stripe.post[Transfer](s"transfers/$transferId", QueryConfig.default, data: _*)
   }
 
   def list(created: Option[TimestampFilter] = None,
@@ -57,17 +51,15 @@ class TransfersSupport(stripe: Stripe) extends Implicits {
            destination: Option[String] = None,
            recipient: Option[String] = None,
            status: Option[String] = None,
-           config: QueryConfig = QueryConfig.default): Future[StripeList[Transfer]] = {
+           config: QueryConfig = QueryConfig.default): Future[Either[ResponseError, StripeList[Transfer]]] = {
     val data = List(
-      created.map("created" -> Pickler.write(_)),
-      date.map("date" -> Pickler.write(_)),
-      destination.map("destination" -> _),
-      recipient.map("recipient" -> _),
-      status.map("status" -> _)
+      write("created", created),
+      write("date", date),
+      write("destination", destination),
+      write("recipient", recipient),
+      write("status", status)
     ).flatten
-    stripe.get("transfers", config, data: _*).map { response =>
-      Pickler.read[StripeList[Transfer]](response.body)
-    }
+    stripe.get[StripeList[Transfer]]("transfers", config, data: _*)
   }
 
   lazy val reversals: TransferReversalsSupport = new TransferReversalsSupport(stripe)

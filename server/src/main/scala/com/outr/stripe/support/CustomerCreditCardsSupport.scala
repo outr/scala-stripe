@@ -1,7 +1,7 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.charge.Card
-import com.outr.stripe.{Deleted, Implicits, Pickler, QueryConfig, Stripe, StripeList}
+import com.outr.stripe.{Deleted, Implicits, Pickler, QueryConfig, ResponseError, Stripe, StripeList}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -11,22 +11,18 @@ class CustomerCreditCardsSupport(stripe: Stripe) extends Implicits {
              source: Option[String] = None,
              externalAccount: Option[String] = None,
              defaultForCurrency: Option[String] = None,
-             metadata: Map[String, String] = Map.empty): Future[Card] = {
+             metadata: Map[String, String] = Map.empty): Future[Either[ResponseError, Card]] = {
     val data = List(
-      source.map("source" -> _),
-      externalAccount.map("external_account" -> _),
-      defaultForCurrency.map("default_for_currency" -> _),
-      if (metadata.nonEmpty) Some("metadata" -> Pickler.write(metadata)) else None
+      write("source", source),
+      write("external_account", externalAccount),
+      write("default_for_currency", defaultForCurrency),
+      write("metadata", metadata)
     ).flatten
-    stripe.post(s"customers/$customerId/sources", QueryConfig.default, data: _*).map { response =>
-      Pickler.read[Card](response.body)
-    }
+    stripe.post[Card](s"customers/$customerId/sources", QueryConfig.default, data: _*)
   }
 
-  def byId(customerId: String, cardId: String): Future[Card] = {
-    stripe.get(s"customers/$customerId/sources/$cardId", QueryConfig.default).map { response =>
-      Pickler.read[Card](response.body)
-    }
+  def byId(customerId: String, cardId: String): Future[Either[ResponseError, Card]] = {
+    stripe.get[Card](s"customers/$customerId/sources/$cardId", QueryConfig.default)
   }
 
   def update(customerId: String,
@@ -41,34 +37,28 @@ class CustomerCreditCardsSupport(stripe: Stripe) extends Implicits {
              expMonth: Option[Int] = None,
              expYear: Option[Int] = None,
              metadata: Map[String, String] = Map.empty,
-             name: Option[String] = None): Future[Card] = {
+             name: Option[String] = None): Future[Either[ResponseError, Card]] = {
     val data = List(
-      addressCity.map("address_city" -> _),
-      addressCountry.map("address_country" -> _),
-      addressLine1.map("address_line1" -> _),
-      addressLine2.map("address_line2" -> _),
-      addressState.map("address_state" -> _),
-      addressZip.map("address_zip" -> _),
-      defaultForCurrency.map("default_for_currency" -> _),
-      expMonth.map("exp_month" -> _.toString),
-      expYear.map("exp_year" -> _.toString),
-      if (metadata.nonEmpty) Some("metadata" -> Pickler.write(metadata)) else None,
-      name.map("name" -> _)
+      write("address_city", addressCity),
+      write("address_country", addressCountry),
+      write("address_line1", addressLine1),
+      write("address_line2", addressLine2),
+      write("address_state", addressState),
+      write("address_zip", addressZip),
+      write("default_for_currency", defaultForCurrency),
+      write("exp_month", expMonth),
+      write("exp_year", expYear),
+      write("metadata", metadata),
+      write("name", name)
     ).flatten
-    stripe.post(s"customers/$customerId/sources/$cardId", QueryConfig.default, data: _*).map { response =>
-      Pickler.read[Card](response.body)
-    }
+    stripe.post[Card](s"customers/$customerId/sources/$cardId", QueryConfig.default, data: _*)
   }
 
-  def delete(customerId: String, cardId: String): Future[Deleted] = {
-    stripe.delete(s"customers/$customerId/sources/$cardId", QueryConfig.default).map { response =>
-      Pickler.read[Deleted](response.body)
-    }
+  def delete(customerId: String, cardId: String): Future[Either[ResponseError, Deleted]] = {
+    stripe.delete[Deleted](s"customers/$customerId/sources/$cardId", QueryConfig.default)
   }
 
-  def list(customerId: String, config: QueryConfig = QueryConfig.default): Future[StripeList[Card]] = {
-    stripe.get(s"customers/$customerId/sources", config, "object" -> "card").map { response =>
-      Pickler.read[StripeList[Card]](response.body)
-    }
+  def list(customerId: String, config: QueryConfig = QueryConfig.default): Future[Either[ResponseError, StripeList[Card]]] = {
+    stripe.get[StripeList[Card]](s"customers/$customerId/sources", config, "object" -> "card")
   }
 }

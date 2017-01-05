@@ -1,7 +1,7 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.connect.{Acceptance, Account, DeclineChargesOn, LegalEntity, TransferSchedule}
-import com.outr.stripe.{Deleted, Implicits, Pickler, QueryConfig, Stripe, StripeList}
+import com.outr.stripe.{Deleted, Implicits, Pickler, QueryConfig, ResponseError, Stripe, StripeList}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -9,21 +9,17 @@ import scala.concurrent.Future
 class AccountsSupport(stripe: Stripe) extends Implicits {
   def create(country: Option[String] = None,
              email: Option[String] = None,
-             managed: Boolean = false): Future[Account] = {
+             managed: Boolean = false): Future[Either[ResponseError, Account]] = {
     val data = List(
-      country.map("country" -> _),
-      email.map("email" -> _),
-      if (managed) Some("managed" -> "true") else None
+      write("country", country),
+      write("email", email),
+      write("managed", managed, default = true)
     ).flatten
-    stripe.post("accounts", QueryConfig.default, data: _*).map { response =>
-      Pickler.read[Account](response.body)
-    }
+    stripe.post[Account]("accounts", QueryConfig.default, data: _*)
   }
 
-  def byId(accountId: String): Future[Account] = {
-    stripe.get(s"accounts/$accountId", QueryConfig.default).map { response =>
-      Pickler.read[Account](response.body)
-    }
+  def byId(accountId: String): Future[Either[ResponseError, Account]] = {
+    stripe.get[Account](s"accounts/$accountId", QueryConfig.default)
   }
 
   def update(accountId: String,
@@ -45,49 +41,41 @@ class AccountsSupport(stripe: Stripe) extends Implicits {
              supportUrl: Option[String] = None,
              tosAcceptance: Option[Acceptance] = None,
              transferSchedule: Option[TransferSchedule] = None,
-             transferStatementDescriptor: Option[String] = None): Future[Account] = {
+             transferStatementDescriptor: Option[String] = None): Future[Either[ResponseError, Account]] = {
     val data = List(
-      businessLogo.map("business_logo" -> _),
-      businessName.map("business_name" -> _),
-      businessPrimaryColor.map("business_primary_color" -> _),
-      businessUrl.map("business_url" -> _),
-      debitNegativeBalances.map("debit_negative_balances" -> _.toString),
-      declineChargeOn.map("decline_charge_on" -> Pickler.write(_)),
-      defaultCurrency.map("default_currency" -> _),
-      email.map("email" -> _),
-      externalAccount.map("external_account" -> _),
-      legalEntity.map("legal_entity" -> Pickler.write(_)),
-      if (metadata.nonEmpty) Some("metadata" -> Pickler.write(metadata)) else None,
-      productDescription.map("product_description" -> _),
-      statementDescriptor.map("statement_descriptor" -> _),
-      supportEmail.map("support_email" -> _),
-      supportPhone.map("support_phone" -> _),
-      supportUrl.map("support_url" -> _),
-      tosAcceptance.map("tos_acceptance" -> Pickler.write(_)),
-      transferSchedule.map("transfer_schedule" -> Pickler.write(_)),
-      transferStatementDescriptor.map("transfer_statement_descriptor" -> _)
+      write("business_logo", businessLogo),
+      write("business_name", businessName),
+      write("business_primary_color", businessPrimaryColor),
+      write("business_url", businessUrl),
+      write("debit_negative_balances", debitNegativeBalances),
+      write("decline_charges_on", declineChargeOn),
+      write("default_currency", defaultCurrency),
+      write("email", email),
+      write("external_account", externalAccount),
+      write("legal_entity", legalEntity),
+      write("metadata", metadata),
+      write("product_description", productDescription),
+      write("statement_descriptor", statementDescriptor),
+      write("support_email", supportEmail),
+      write("support_phone", supportPhone),
+      write("support_url", supportUrl),
+      write("tos_acceptance", tosAcceptance),
+      write("transfer_schedule", transferSchedule),
+      write("transfer_statement_descriptor", transferStatementDescriptor)
     ).flatten
-    stripe.post(s"accounts/$accountId", QueryConfig.default, data: _*).map { response =>
-      Pickler.read[Account](response.body)
-    }
+    stripe.post[Account](s"accounts/$accountId", QueryConfig.default, data: _*)
   }
 
-  def delete(accountId: String): Future[Deleted] = {
-    stripe.delete(s"accounts/$accountId", QueryConfig.default).map { response =>
-      Pickler.read[Deleted](response.body)
-    }
+  def delete(accountId: String): Future[Either[ResponseError, Deleted]] = {
+    stripe.delete[Deleted](s"accounts/$accountId", QueryConfig.default)
   }
 
-  def reject(accountId: String, reason: String): Future[Account] = {
-    stripe.post(s"accounts/$accountId/reject", QueryConfig.default, "reason" -> reason).map { response =>
-      Pickler.read[Account](response.body)
-    }
+  def reject(accountId: String, reason: String): Future[Either[ResponseError, Account]] = {
+    stripe.post[Account](s"accounts/$accountId/reject", QueryConfig.default, "reason" -> reason)
   }
 
-  def list(config: QueryConfig = QueryConfig.default): Future[StripeList[Account]] = {
-    stripe.get("accounts", config).map { response =>
-      Pickler.read[StripeList[Account]](response.body)
-    }
+  def list(config: QueryConfig = QueryConfig.default): Future[Either[ResponseError, StripeList[Account]]] = {
+    stripe.get[StripeList[Account]]("accounts", config)
   }
 
   object external {
