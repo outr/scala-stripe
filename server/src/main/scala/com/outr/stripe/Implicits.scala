@@ -261,4 +261,35 @@ trait Implicits {
       write(s"$key[stripe_report]", value.stripeReport)
     ).flatten.toMap
   }
+  protected implicit val disputeEvidenceEncoder: MapEncoder[DisputeEvidence] = new MapEncoder[DisputeEvidence] {
+    override def encode(key: String, value: DisputeEvidence): Map[String, String] = List(
+      write(s"$key[access_activity_log]", value.accessActivityLog),
+      write(s"$key[billing_address]", value.billingAddress),
+      write(s"$key[cancellation_policy]", value.cancellationPolicy),
+      write(s"$key[cancellation_policy_disclosure]", value.cancellationPolicyDisclosure),
+      write(s"$key[cancellation_rebuttal]", value.cancellationRebuttal),
+      write(s"$key[customer_communication]", value.customerCommunication),
+      write(s"$key[customer_email_address]", value.customerEmailAddress),
+      write(s"$key[customer_name]", value.customerName),
+      write(s"$key[customer_purchase_ip]", value.customerPurchaseIp),
+      write(s"$key[customer_signature]", value.customerSignature),
+      write(s"$key[duplicate_charge_documentation]", value.duplicateChargeDocumentation),
+      write(s"$key[duplicate_charge_explanation]", value.duplicateChargeExplanation),
+      write(s"$key[duplicate_charge_id]", value.duplicateChargeId),
+      write(s"$key[product_description]", value.productDescription),
+      write(s"$key[receipt]", value.receipt),
+      write(s"$key[refund_policy]", value.refundPolicy),
+      write(s"$key[refund_policy_disclosure]", value.refundPolicyDisclosure),
+      write(s"$key[refund_refusal_explanation]", value.refundRefusalExplanation),
+      write(s"$key[service_date]", value.serviceDate),
+      write(s"$key[service_documentation]", value.serviceDocumentation),
+      write(s"$key[shipping_address]", value.shippingAddress),
+      write(s"$key[shipping_carrier]", value.shippingCarrier),
+      write(s"$key[shipping_date]", value.shippingDate),
+      write(s"$key[shipping_documentation]", value.shippingDocumentation),
+      write(s"$key[shipping_tracking_number]", value.shippingTrackingNumber),
+      write(s"$key[uncategorized_file]", value.uncategorizedFile),
+      write(s"$key[uncategorized_text]", value.uncategorizedText)
+    ).flatten.toMap
+  }
 }
