@@ -84,7 +84,7 @@ stripe.charges.create(Money(5.0), "USD", source = creditCardTokenId, customer = 
 }
 ```
 
-## Features for 2.0.0 (Future)
+## Features for 2.0.0 (In-Progress)
 
 * [ ] Stripe API Relay
     * [ ] Orders
@@ -102,7 +102,7 @@ stripe.charges.create(Money(5.0), "USD", source = creditCardTokenId, customer = 
 * [ ] Stripe.js
     * [ ] Apple Pay
 
-## Features for 1.0.0 (In-Progress)
+## Features for 1.0.0 (Released 2016.01.05)
 
 * [X] Stripe.js functionality in Scala.js (Excludes Apple Pay)
     * [X] Card
