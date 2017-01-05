@@ -1,7 +1,6 @@
 package specs
 
 import com.outr.stripe.Stripe
-import com.outr.stripe.Test.logger
 import com.outr.stripe.card.{CardTokenInfo, StripeCardInfo}
 import org.scalatest.{Assertion, AsyncWordSpec, Matchers, WordSpec}
 

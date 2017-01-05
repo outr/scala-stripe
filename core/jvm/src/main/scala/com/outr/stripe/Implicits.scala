@@ -18,9 +18,10 @@ import io.circe.generic.auto._
 trait Implicits {
   // Decoders
 
-  protected implicit val moneyDecoder = new Decoder[Money] {
-    override def apply(c: HCursor): Result[Money] = {
-      Decoder.decodeLong(c).map(l => Money(l))
+  protected implicit val moneyDecoder: Decoder[Money] = new Decoder[Money] {
+    override def apply(c: HCursor): Result[Money] = Decoder.decodeLong(c) match {
+      case Left(failure) => Left(failure)
+      case Right(l) => Right(Money(l))
     }
   }
   protected implicit val transferDecoder: Decoder[Transfer] = deriveDecoder[Transfer]

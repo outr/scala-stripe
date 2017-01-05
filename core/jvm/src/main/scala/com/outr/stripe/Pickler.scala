@@ -17,6 +17,9 @@ object Pickler {
       s""""$key": ${regexMatch.group(2)}"""
     })
     // Use Circe to decode the JSON into a case class
-    decode[T](json).getOrElse(throw new PicklerException(s"Unable to decode $jsonString (${manifest.runtimeClass.getName})"))
+    decode[T](json) match {
+      case Left(error) => throw new PicklerException(s"Unable to decode $jsonString (${manifest.runtimeClass.getName})", error)
+      case Right(value) => value
+    }
   }
 }
