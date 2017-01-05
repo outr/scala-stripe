@@ -5,39 +5,36 @@ scalaVersion in ThisBuild := "2.12.1"
 crossScalaVersions in ThisBuild := List("2.12.1", "2.11.8")
 sbtVersion in ThisBuild := "0.13.13"
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
+resolvers in ThisBuild += Resolver.sonatypeRepo("releases")
 
 val circeVersion = "0.6.1"
 
 lazy val root = project.in(file("."))
-  .aggregate(client, server)
+  .aggregate(coreJS, coreJVM)
   .settings(
     publish := {},
     publishLocal := {}
   )
 
-lazy val client = project.in(file("client"))
-  .enablePlugins(ScalaJSPlugin)
+lazy val core = crossProject.in(file("core"))
   .settings(
-    name := "scala-stripe-client",
-    //jsDependencies += ProvidedJS / "stripe-v2.js" % Test
-    jsDependencies += RuntimeDOM,
-    libraryDependencies += "com.outr" %%% "scribe" % "1.2.6",
+    name := "scala-stripe",
+    libraryDependencies += "com.outr" %%% "scribe" % "1.3.1",
     libraryDependencies += "org.scalactic" %%% "scalactic" % "3.0.1",
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1" % "test"
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
   )
-
-lazy val server = project.in(file("server"))
-  .settings(
-    name := "scala-stripe-server",
-    fork := true,
-    libraryDependencies += "com.outr" %% "scribe-slf4j" % "1.2.6",
+  .jvmSettings(
     libraryDependencies += "com.eed3si9n" %% "gigahorse-core" % "0.2-SNAPSHOT",
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core",
       "io.circe" %% "circe-generic",
       "io.circe" %% "circe-parser"
-    ).map(_ % circeVersion),
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+    ).map(_ % circeVersion)
   )
+  .jsSettings(
+    jsDependencies += RuntimeDOM,
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
+  )
+
+lazy val coreJS = core.js
+lazy val coreJVM = core.jvm

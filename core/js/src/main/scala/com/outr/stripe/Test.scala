@@ -1,11 +1,11 @@
 package com.outr.stripe
 
-import com.outr.scribe.Logging
+import com.outr.scribe._
 import com.outr.stripe.card.{CardTokenInfo, StripeCardInfo}
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
-object Test extends Logging {
+object Test {
   @JSExportTopLevel("testStripe")
   def main(): Unit = {
     Stripe.setPublishableKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh")
