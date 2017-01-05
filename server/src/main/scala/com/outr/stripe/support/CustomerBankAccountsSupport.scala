@@ -1,9 +1,8 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.charge.BankAccount
-import com.outr.stripe.{Deleted, Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList}
+import com.outr.stripe.{Deleted, Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CustomerBankAccountsSupport(stripe: Stripe) extends Implicits {

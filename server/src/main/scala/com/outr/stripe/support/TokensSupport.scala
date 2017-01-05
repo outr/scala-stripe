@@ -2,9 +2,8 @@ package com.outr.stripe.support
 
 import com.outr.stripe.charge.{BankAccount, Card, PII}
 import com.outr.stripe.token.Token
-import com.outr.stripe.{Implicits, Pickler, QueryConfig, ResponseError, Stripe}
+import com.outr.stripe.{Implicits, QueryConfig, ResponseError, Stripe}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class TokensSupport(stripe: Stripe) extends Implicits {

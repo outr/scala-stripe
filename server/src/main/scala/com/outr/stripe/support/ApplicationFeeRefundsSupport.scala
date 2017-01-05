@@ -1,9 +1,8 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.connect.FeeRefund
-import com.outr.stripe.{Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList}
+import com.outr.stripe.{Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ApplicationFeeRefundsSupport(stripe: Stripe) extends Implicits {

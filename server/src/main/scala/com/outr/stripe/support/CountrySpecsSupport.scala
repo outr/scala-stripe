@@ -1,9 +1,8 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.connect.CountrySpec
-import com.outr.stripe.{Implicits, Pickler, QueryConfig, ResponseError, Stripe, StripeList}
+import com.outr.stripe.{Implicits, QueryConfig, ResponseError, Stripe, StripeList}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CountrySpecsSupport(stripe: Stripe) extends Implicits {

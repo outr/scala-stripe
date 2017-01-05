@@ -1,7 +1,7 @@
 package com.outr.stripe.subscription
 
-import com.outr.stripe.{Money, StripeList}
 import com.outr.stripe.customer.Discount
+import com.outr.stripe.{Money, StripeList}
 
 case class Invoice(id: String,
                    `object`: String,

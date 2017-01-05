@@ -1,11 +1,8 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.charge.{BankAccount, Card, PII}
 import com.outr.stripe.subscription.Coupon
-import com.outr.stripe.token.Token
-import com.outr.stripe.{Deleted, Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.{Deleted, Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CouponsSupport(stripe: Stripe) extends Implicits {

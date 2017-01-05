@@ -1,9 +1,8 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.subscription.Subscription
-import com.outr.stripe.{Implicits, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.{Implicits, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SubscriptionsSupport(stripe: Stripe) extends Implicits {

@@ -1,9 +1,8 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.subscription.Plan
-import com.outr.stripe.{Deleted, Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.{Deleted, Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class PlansSupport(stripe: Stripe) extends Implicits {

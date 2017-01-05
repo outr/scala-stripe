@@ -2,7 +2,7 @@ package com.outr.stripe
 
 import com.outr.stripe.balance.{Balance, BalanceEntry, BalanceTransaction, FeeDetail, Reversal, SourceType}
 import com.outr.stripe.charge.{Address, BankAccount, Card, Charge, FraudDetails, Outcome, PII, Rule, Shipping}
-import com.outr.stripe.connect.{Acceptance, Account, AddressKana, AddressKanji, ApplicationFee, CountrySpec, Date, DeclineChargesOn, FeeRefund, LegalEntity, TransferSchedule, Verification}
+import com.outr.stripe.connect.{Acceptance, Account, AccountVerification, AddressKana, AddressKanji, ApplicationFee, CountrySpec, Date, DeclineChargesOn, FeeRefund, Keys, LegalEntity, TransferSchedule, Verification, VerificationFields}
 import com.outr.stripe.customer.{Customer, Discount}
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence, EvidenceDetails}
 import com.outr.stripe.event.{Event, EventData}
@@ -83,6 +83,14 @@ trait Implicits {
   protected implicit val invoiceItemListDecoder: Decoder[StripeList[InvoiceItem]] = deriveDecoder[StripeList[InvoiceItem]]
   protected implicit val errorMessageWrapperDecoder: Decoder[ErrorMessageWrapper] = deriveDecoder[ErrorMessageWrapper]
   protected implicit val errorMessageDecoder: Decoder[ErrorMessage] = deriveDecoder[ErrorMessage]
+  protected implicit val declineChargesOnDecoder: Decoder[DeclineChargesOn] = deriveDecoder[DeclineChargesOn]
+  protected implicit val legalEntityDecoder: Decoder[LegalEntity] = deriveDecoder[LegalEntity]
+  protected implicit val acceptanceDecoder: Decoder[Acceptance] = deriveDecoder[Acceptance]
+  protected implicit val transferScheduleDecoder: Decoder[TransferSchedule] = deriveDecoder[TransferSchedule]
+  protected implicit val accountVerificationDecoder: Decoder[AccountVerification] = deriveDecoder[AccountVerification]
+  protected implicit val keysDecoder: Decoder[Keys] = deriveDecoder[Keys]
+  protected implicit val jsonListDecoder: Decoder[StripeList[Json]] = deriveDecoder[StripeList[Json]]
+  protected implicit val verificationFieldsDecoder: Decoder[VerificationFields] = deriveDecoder[VerificationFields]
 
   // Encoders
 

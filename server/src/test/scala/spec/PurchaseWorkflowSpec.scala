@@ -1,7 +1,7 @@
 package spec
 
 import com.outr.stripe.charge.Card
-import org.scalatest.{AsyncWordSpec, Matchers, WordSpec}
+import org.scalatest.{AsyncWordSpec, Matchers}
 
 class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
   "Purchase Workflow" should {

@@ -1,8 +1,7 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.{Deleted, Implicits, Pickler, QueryConfig, ResponseError, Stripe}
+import com.outr.stripe.{Deleted, Implicits, QueryConfig, ResponseError, Stripe}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DiscountSupport(stripe: Stripe) extends Implicits {

@@ -1,7 +1,7 @@
 package com.outr.stripe.dispute
 
-import com.outr.stripe.{Money, StripeList}
 import com.outr.stripe.balance.BalanceTransaction
+import com.outr.stripe.{Money, StripeList}
 
 case class Dispute(id: String,
                    `object`: String,

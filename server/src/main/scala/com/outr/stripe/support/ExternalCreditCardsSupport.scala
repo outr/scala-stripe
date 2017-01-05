@@ -1,9 +1,8 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.charge.{BankAccount, Card}
-import com.outr.stripe.{Deleted, Implicits, Pickler, QueryConfig, ResponseError, Stripe, StripeList}
+import com.outr.stripe.charge.Card
+import com.outr.stripe.{Deleted, Implicits, QueryConfig, ResponseError, Stripe, StripeList}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ExternalCreditCardsSupport(stripe: Stripe) extends Implicits {

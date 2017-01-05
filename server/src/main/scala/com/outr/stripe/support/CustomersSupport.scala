@@ -2,9 +2,8 @@ package com.outr.stripe.support
 
 import com.outr.stripe.charge.{Card, Shipping}
 import com.outr.stripe.customer.Customer
-import com.outr.stripe.{Deleted, Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.{Deleted, Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CustomersSupport(stripe: Stripe) extends Implicits {

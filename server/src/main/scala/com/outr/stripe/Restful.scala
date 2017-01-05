@@ -4,8 +4,8 @@ import gigahorse.{Gigahorse, HttpVerbs, Realm, Response}
 import io.circe.Decoder
 
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 trait Restful extends Implicits {
   def apiKey: String

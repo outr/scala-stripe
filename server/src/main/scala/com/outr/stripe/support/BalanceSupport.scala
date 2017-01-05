@@ -1,10 +1,9 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.{Implicits, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 import com.outr.stripe.balance.{Balance, BalanceTransaction}
+import com.outr.stripe.{Implicits, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class BalanceSupport(stripe: Stripe) extends Implicits {
   def apply(): Future[Either[ResponseError, Balance]] = {

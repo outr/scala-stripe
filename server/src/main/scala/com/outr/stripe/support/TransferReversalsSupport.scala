@@ -1,9 +1,8 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.transfer.{Transfer, TransferReversal}
-import com.outr.stripe.{Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.transfer.TransferReversal
+import com.outr.stripe.{Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class TransferReversalsSupport(stripe: Stripe) extends Implicits {

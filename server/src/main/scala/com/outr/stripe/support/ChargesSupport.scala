@@ -1,10 +1,9 @@
 package com.outr.stripe.support
 
 import com.outr.stripe.charge.{Card, Charge, FraudDetails, Shipping}
-import com.outr.stripe.{Implicits, Money, Pickler, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
+import com.outr.stripe.{Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class ChargesSupport(stripe: Stripe) extends Implicits {
   def create(amount: Money,
