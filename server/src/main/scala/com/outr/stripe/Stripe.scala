@@ -8,7 +8,7 @@ class Stripe(val apiKey: String) extends Restful with Logging {
   override protected def url(endPoint: String): String = s"$baseURL/$endPoint"
 
   lazy val balance: BalanceSupport = new BalanceSupport(this)
-//  lazy val charges: ChargesSupport = new ChargesSupport(this)
+  lazy val charges: ChargesSupport = new ChargesSupport(this)
   lazy val customers: CustomersSupport = new CustomersSupport(this)
 //  lazy val disputes: DisputesSupport = new DisputesSupport(this)
 //  lazy val events: EventsSupport = new EventsSupport(this)
@@ -16,7 +16,7 @@ class Stripe(val apiKey: String) extends Restful with Logging {
   lazy val tokens: TokensSupport = new TokensSupport(this)
   lazy val transfers: TransfersSupport = new TransfersSupport(this)
 //  lazy val accounts: AccountsSupport = new AccountsSupport(this)
-//  lazy val applicationFees: ApplicationFeesSupport = new ApplicationFeesSupport(this)
+  lazy val applicationFees: ApplicationFeesSupport = new ApplicationFeesSupport(this)
 //  lazy val countrySpecs: CountrySpecsSupport = new CountrySpecsSupport(this)
 //  lazy val coupons: CouponsSupport = new CouponsSupport(this)
 //  lazy val discounts: DiscountSupport = new DiscountSupport(this)

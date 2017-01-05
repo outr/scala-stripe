@@ -253,4 +253,12 @@ trait Implicits {
       write(s"$key[status]", value.status)
     ).flatten.toMap
   }
+  protected implicit val fraudDetailsEncoder: MapEncoder[FraudDetails] = new MapEncoder[FraudDetails] {
+    override def encode(key: String, value: FraudDetails): Map[String, String] = List(
+      write(s"$key[user_report]", value.userReport),
+      write(s"$key[safe]", value.safe),
+      write(s"$key[fraudulent]", value.fraudulent),
+      write(s"$key[stripe_report]", value.stripeReport)
+    ).flatten.toMap
+  }
 }
