@@ -292,4 +292,9 @@ trait Implicits {
       write(s"$key[uncategorized_text]", value.uncategorizedText)
     ).flatten.toMap
   }
+  protected implicit val stringListEncoder: MapEncoder[List[String]] = new MapEncoder[List[String]] {
+    override def encode(key: String, value: List[String]): Map[String, String] = value.zipWithIndex.map {
+      case (s, index) => s"$key[$index]" -> s
+    }.toMap
+  }
 }
