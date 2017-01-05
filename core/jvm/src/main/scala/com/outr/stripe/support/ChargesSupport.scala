@@ -16,7 +16,7 @@ class ChargesSupport(stripe: Stripe) extends Implicits {
              receiptEmail: Option[String] = None,
              shipping: Option[Shipping] = None,
              customer: Option[String] = None,
-             source: Option[Card] = None,
+             source: Option[String] = None,
              statementDescriptor: Option[String] = None): Future[Either[ResponseError, Charge]] = {
     val data = List(
       write("amount", amount),
