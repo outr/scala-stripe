@@ -21,6 +21,15 @@ libraryDependencies += "com.outr" %% "scala-stripe" % "1.0.0"   // Scala
 libraryDependencies += "com.outr" %%% "scala-stripe" % "1.0.0"  // Scala.js / Cross-Build
 ```
 
+## Dependencies
+
+It's important to know how much your biting off when you are adding another dependency to your project. As such, we've
+endeavored to keep the dependencies to a minimum:
+
+* Scribe for logging (https://github.com/outr/scribe)
+* Gigahorse for non-blocking IO (https://github.com/eed3si9n/gigahorse)
+* Circe for JSON pickling (https://github.com/circe/circe)
+
 ## Getting Started
 
 Though the JVM supports creating credit card tokens, the ideal path is to avoid the server every having any such knowledge.
