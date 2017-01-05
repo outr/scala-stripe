@@ -32,7 +32,7 @@ endeavored to keep the dependencies to a minimum:
 
 ## Getting Started
 
-Though the JVM supports creating credit card tokens, the ideal path is to avoid the server every having any such knowledge.
+Though the JVM supports creating credit card tokens, the ideal path is to avoid the server ever having any such knowledge.
 To that end we will use Scala.js to first create the card token, and then the server (JVM) will use that token to make
 a purchase.
 
@@ -92,6 +92,12 @@ stripe.charges.create(Money(5.0), "USD", source = creditCardTokenId, customer = 
   case Right(charge) => // Success! Handle the Charge instance returned
 }
 ```
+
+#### Next Steps
+
+Hopefully that is enough to get you started with stripe-scala. There is much more available and we attempt to be a very
+close wrapper around the Stripe API. If you have any problems refer to the Stripe API documentation as we try to remain
+very close to them.
 
 ## Features for 2.0.0 (In-Progress)
 
