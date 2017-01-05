@@ -15,32 +15,32 @@ trait Restful extends Implicits {
   private[stripe] def get[R](endPoint: String,
                              config: QueryConfig,
                              data: (String, String)*)
-                            (implicit decoder: Decoder[R]): Future[Either[ResponseError, R]] = {
-    process[R](HttpVerbs.GET, endPoint = endPoint, config = config, data = data, decoder = decoder)
+                            (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
+    process[R](HttpVerbs.GET, endPoint = endPoint, config = config, data = data)
   }
 
   private[stripe] def post[R](endPoint: String,
                               config: QueryConfig,
                               data: (String, String)*)
-                             (implicit decoder: Decoder[R]): Future[Either[ResponseError, R]] = {
-    process[R](HttpVerbs.POST, endPoint = endPoint, config = config, data = data, decoder = decoder)
+                             (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
+    process[R](HttpVerbs.POST, endPoint = endPoint, config = config, data = data)
   }
 
   private[stripe] def delete[R](endPoint: String,
                                 config: QueryConfig,
                                 data: (String, String)*)
-                               (implicit decoder: Decoder[R]): Future[Either[ResponseError, R]] = {
-    process[R](HttpVerbs.DELETE, endPoint = endPoint, config = config, data = data, decoder = decoder)
+                               (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
+    process[R](HttpVerbs.DELETE, endPoint = endPoint, config = config, data = data)
   }
 
   private[stripe] def process[R](method: String,
                                  endPoint: String,
                                  config: QueryConfig,
-                                 data: Seq[(String, String)],
-                                 decoder: Decoder[R]): Future[Either[ResponseError, R]] = {
+                                 data: Seq[(String, String)])
+                                (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
     call(method, endPoint = endPoint, config = config, data = data).map { response =>
       if (response.status == 200) {
-        Right(Pickler.read[R](response.body)(decoder))
+        Right(Pickler.read[R](response.body))
       } else {
         val wrapper = Pickler.read[ErrorMessageWrapper](response.body)
         Left(ResponseError(response.statusText, response.status, wrapper.error))

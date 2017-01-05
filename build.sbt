@@ -19,7 +19,7 @@ lazy val root = project.in(file("."))
 lazy val core = crossProject.in(file("core"))
   .settings(
     name := "scala-stripe",
-    libraryDependencies += "com.outr" %%% "scribe" % "1.3.1",
+    libraryDependencies += "com.outr" %%% "scribe" % "1.3.2",
     libraryDependencies += "org.scalactic" %%% "scalactic" % "3.0.1",
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
   )

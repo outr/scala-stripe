@@ -1,5 +1,6 @@
 package spec
 
+import com.outr.stripe.Money
 import com.outr.stripe.charge.Card
 import org.scalatest.{AsyncWordSpec, Matchers}
 
@@ -64,6 +65,19 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
           card.expYear should be(2017)
           creditCardId = Option(card.id)
           creditCardId shouldNot be(None)
+        }
+      }
+    }
+    "make a purchase with the test customer" in {
+      TestStripe.charges.create(Money(5.0), "USD", customer = customerId).map {
+        case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
+        case Right(charge) => {
+          charge.amount should be(Money(500L))
+          charge.captured should be(true)
+          charge.failureCode should be(None)
+          charge.failureMessage should be(None)
+          charge.source.id should be(creditCardId.get)
+          charge.status should be("succeeded")
         }
       }
     }
