@@ -1,7 +1,9 @@
 package com.outr.stripe
 
-import gigahorse.{Gigahorse, HttpVerbs, Realm, Response}
+import gigahorse.{FullResponse, HttpVerbs, Realm}
+import gigahorse.support.asynchttpclient.Gigahorse
 import io.circe.Decoder
+import org.asynchttpclient.Response
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,9 +42,9 @@ trait Restful extends Implicits {
                                 (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
     call(method, endPoint = endPoint, config = config, data = data).map { response =>
       if (response.status == 200) {
-        Right(Pickler.read[R](response.body))
+        Right(Pickler.read[R](response.bodyAsString))
       } else {
-        val wrapper = Pickler.read[ErrorMessageWrapper](response.body)
+        val wrapper = Pickler.read[ErrorMessageWrapper](response.bodyAsString)
         Left(ResponseError(response.statusText, response.status, wrapper.error))
       }
     }
@@ -51,7 +53,7 @@ trait Restful extends Implicits {
   private[stripe] def call(method: String,
                            endPoint: String,
                            config: QueryConfig,
-                           data: Seq[(String, String)]): Future[Response] = {
+                           data: Seq[(String, String)]): Future[FullResponse] = {
     val client = Gigahorse.http(Gigahorse.config)
     try {
       val headers = ListBuffer.empty[(String, String)]
@@ -68,7 +70,7 @@ trait Restful extends Implicits {
         case r => r.withMethod(method).addQueryString(args: _*)
       }
 
-      val future = client.process(request)
+      val future = client.processFull(request)
       future.onComplete { t =>
         client.close()
       }

@@ -1,6 +1,6 @@
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.0.1"
+version in ThisBuild := "1.0.2"
 scalaVersion in ThisBuild := "2.12.1"
 crossScalaVersions in ThisBuild := List("2.12.1", "2.11.8")
 sbtVersion in ThisBuild := "0.13.13"
@@ -24,7 +24,10 @@ lazy val core = crossProject.in(file("core"))
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
   )
   .jvmSettings(
-    libraryDependencies += "com.eed3si9n" %% "gigahorse-core" % "0.2-SNAPSHOT",
+    libraryDependencies ++= Seq(
+      "com.eed3si9n" %% "gigahorse-core" % "0.2.0",
+      "com.eed3si9n" %% "gigahorse-asynchttpclient" % "0.2.0"
+    ),
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core",
       "io.circe" %% "circe-generic",
