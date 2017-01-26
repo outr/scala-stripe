@@ -40,7 +40,8 @@ class CustomersSupport(stripe: Stripe) extends Implicits {
     stripe.get[Customer](s"customers/$customerId", QueryConfig.default)
   }
 
-  def update(accountBalance: Option[Money] = None,
+  def update(customerId: String,
+             accountBalance: Option[Money] = None,
              businessVatId: Option[String] = None,
              coupon: Option[String] = None,
              defaultSource: Option[String] = None,
@@ -60,7 +61,7 @@ class CustomersSupport(stripe: Stripe) extends Implicits {
       write("source", source),
       write("default_source", defaultSource)
     ).flatten
-    stripe.post[Customer]("customers", QueryConfig.default, data: _*)
+    stripe.post[Customer](s"customers/$customerId", QueryConfig.default, data: _*)
   }
 
   def delete(customerId: String): Future[Either[ResponseError, Deleted]] = {
