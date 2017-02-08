@@ -1,6 +1,6 @@
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.0.2"
+version in ThisBuild := "1.0.3"
 scalaVersion in ThisBuild := "2.12.1"
 crossScalaVersions in ThisBuild := List("2.12.1", "2.11.8")
 sbtVersion in ThisBuild := "0.13.13"
@@ -19,7 +19,6 @@ lazy val root = project.in(file("."))
 lazy val core = crossProject.in(file("core"))
   .settings(
     name := "scala-stripe",
-    libraryDependencies += "com.outr" %%% "scribe" % "1.3.2",
     libraryDependencies += "org.scalactic" %%% "scalactic" % "3.0.1",
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
   )

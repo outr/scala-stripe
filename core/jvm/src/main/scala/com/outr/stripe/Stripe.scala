@@ -1,9 +1,8 @@
 package com.outr.stripe
 
-import com.outr.scribe.Logging
 import com.outr.stripe.support._
 
-class Stripe(val apiKey: String) extends Restful with Logging {
+class Stripe(val apiKey: String) extends Restful {
   private val baseURL = "https://api.stripe.com/v1"
   override protected def url(endPoint: String): String = s"$baseURL/$endPoint"
 
