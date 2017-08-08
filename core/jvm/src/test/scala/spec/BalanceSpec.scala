@@ -10,13 +10,13 @@ class BalanceSpec extends AsyncWordSpec with Matchers {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(balance) => {
           balance.`object` should be("balance")
-          balance.available.length should be(3)
-          balance.available.head.currency should be("aud")
-          balance.available.head.amount should be(Money(-0.88))
-          balance.available.head.sourceTypes.card should be(Money(-0.88))
+          balance.available.length should be(6)
+          balance.available.head.currency should be("usd")
+          balance.available.head.amount should be(Money(206109502.75))
+          balance.available.head.sourceTypes.card should be(Money(205014418.19))
           balance.livemode should be(false)
-          balance.pending.length should be(3)
-          balance.pending.last.currency should be("usd")
+          balance.pending.length should be(6)
+          balance.pending.last.currency should be("gbp")
         }
       }
     }

@@ -1,9 +1,11 @@
 package com.outr.stripe
 
-import gigahorse.{FullResponse, HttpVerbs, Realm}
-import gigahorse.support.asynchttpclient.Gigahorse
+import java.util.Base64
+
 import io.circe.Decoder
-import org.asynchttpclient.Response
+import io.youi.client.HttpClient
+import io.youi.http.{Content, Headers, HttpRequest, HttpResponse, Method, Status, StringContent}
+import io.youi.net.{ContentType, Parameters, URL}
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -12,76 +14,77 @@ import scala.concurrent.Future
 trait Restful extends Implicits {
   def apiKey: String
 
-  protected def url(endPoint: String): String
+  protected def url(endPoint: String): URL
 
   private[stripe] def get[R](endPoint: String,
                              config: QueryConfig,
                              data: (String, String)*)
                             (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
-    process[R](HttpVerbs.GET, endPoint = endPoint, config = config, data = data)
+    process[R](Method.Get, endPoint = endPoint, config = config, data = data)
   }
 
   private[stripe] def post[R](endPoint: String,
                               config: QueryConfig,
                               data: (String, String)*)
                              (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
-    process[R](HttpVerbs.POST, endPoint = endPoint, config = config, data = data)
+    process[R](Method.Post, endPoint = endPoint, config = config, data = data)
   }
 
   private[stripe] def delete[R](endPoint: String,
                                 config: QueryConfig,
                                 data: (String, String)*)
                                (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
-    process[R](HttpVerbs.DELETE, endPoint = endPoint, config = config, data = data)
+    process[R](Method.Delete, endPoint = endPoint, config = config, data = data)
   }
 
-  private[stripe] def process[R](method: String,
+  private[stripe] def process[R](method: Method,
                                  endPoint: String,
                                  config: QueryConfig,
                                  data: Seq[(String, String)])
                                 (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
     call(method, endPoint = endPoint, config = config, data = data).map { response =>
-      if (response.status == 200) {
-        Right(Pickler.read[R](response.bodyAsString))
+      if (response.status == Status.OK) {
+        Right(Pickler.read[R](response.content.get.asInstanceOf[StringContent].value))
       } else {
-        val wrapper = Pickler.read[ErrorMessageWrapper](response.bodyAsString)
-        Left(ResponseError(response.statusText, response.status, wrapper.error))
+        val wrapper = Pickler.read[ErrorMessageWrapper](response.content.get.asInstanceOf[StringContent].value)
+        Left(ResponseError(response.status.message, response.status.code, wrapper.error))
       }
     }
   }
 
-  private[stripe] def call(method: String,
+  private lazy val client = new HttpClient()
+  private lazy val authorization = s"Bearer $apiKey"
+
+  private[stripe] def call(method: Method,
                            endPoint: String,
                            config: QueryConfig,
-                           data: Seq[(String, String)]): Future[FullResponse] = {
-    val client = Gigahorse.http(Gigahorse.config)
-    try {
-      val headers = ListBuffer.empty[(String, String)]
-      headers += "Stripe-Version" -> Stripe.Version
-      config.idempotencyKey.foreach(headers += "Idempotency-Key" -> _)
+                           data: Seq[(String, String)]): Future[HttpResponse] = {
+    var headers = Headers.empty
+    headers = headers.withHeader("Stripe-Version", Stripe.Version)
+    config.idempotencyKey.foreach(value => headers = headers.withHeader("Idempotency-Key", value))
+    headers = headers.withHeader(Headers.Request.Authorization(authorization))
 
-      val args = ListBuffer(data: _*)
-      if (config.limit != QueryConfig.default.limit) args += "limit" -> config.limit.toString
-      config.startingAfter.foreach(args += "starting_after" -> _)
-      config.endingBefore.foreach(args += "ending_before" -> _)
+    val args = ListBuffer(data: _*)
+    if (config.limit != QueryConfig.default.limit) args += "limit" -> config.limit.toString
+    config.startingAfter.foreach(args += "starting_after" -> _)
+    config.endingBefore.foreach(args += "ending_before" -> _)
 
-      val request = Gigahorse.url(url(endPoint)).withAuth(Realm(apiKey, "")).addHeaders(headers: _*) match {
-        case r if method == HttpVerbs.POST => r.post(data.map(t => t._1 -> List(t._2)).toMap)
-        case r => r.withMethod(method).addQueryString(args: _*)
-      }
-
-      val future = client.processFull(request)
-      future.onComplete { t =>
-        client.close()
-      }
-      future
-    } catch {
-      case t: Throwable => {
-        client.close()
-        throw t
-      }
+    var url = this.url(endPoint)
+    args.foreach {
+      case (key, value) => url = url.withParam(key, value)
     }
+    val content = if (method == Method.Post) {
+      val params = url.parameters.encoded.substring(1)
+      url = url.copy(parameters = Parameters.empty)
+      Some(Content.string(params, ContentType.`application/x-www-form-urlencoded`))
+    } else {
+      None
+    }
+    val request = HttpRequest(method, url = url, headers = headers, content = content)
+    client.send(request)
   }
+
+  def dispose(): Unit = client.dispose()
 }
 
 case class ResponseError(text: String, code: Int, error: ErrorMessage)
