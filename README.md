@@ -17,8 +17,8 @@ For more information on Stripe.js see https://stripe.com/docs/stripe.js
 scala-stripe is published to Sonatype OSS and Maven Central and supports JVM and Scala.js with 2.11 and 2.12:
 
 ```
-libraryDependencies += "com.outr" %% "scala-stripe" % "1.0.0"   // Scala
-libraryDependencies += "com.outr" %%% "scala-stripe" % "1.0.0"  // Scala.js / Cross-Build
+libraryDependencies += "com.outr" %% "scala-stripe" % "1.1.0"   // Scala
+libraryDependencies += "com.outr" %%% "scala-stripe" % "1.1.0"  // Scala.js / Cross-Build
 ```
 
 ## Dependencies
@@ -116,6 +116,11 @@ very close to them.
     * [ ] Sources
 * [ ] Stripe.js
     * [ ] Apple Pay
+
+## Features for 1.1.0 (Released 2017.08.08)
+
+* [X] Migration to youi-client away from Gigahorse
+* [X] Better error handling support
 
 ## Features for 1.0.0 (Released 2016.01.05)
 
