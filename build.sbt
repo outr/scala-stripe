@@ -1,12 +1,12 @@
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.1.0"
+version in ThisBuild := "1.1.1-SNAPSHOT"
 scalaVersion in ThisBuild := "2.12.3"
 crossScalaVersions in ThisBuild := List("2.12.3", "2.11.11")
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 resolvers in ThisBuild += Resolver.sonatypeRepo("releases")
 
-val youiVersion = "0.5.2"
+val youiVersion = "0.6.2"
 
 lazy val root = project.in(file("."))
   .aggregate(coreJS, coreJVM)
@@ -29,7 +29,6 @@ lazy val core = crossProject.in(file("core"))
   )
   .jsSettings(
     jsDependencies += RuntimeDOM,
-    jsDependencies += ProvidedJS / "stripe-v2.js",
     skip in packageJSDependencies := false,
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.3"
   )
