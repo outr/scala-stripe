@@ -1,8 +1,8 @@
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.1.1"
-scalaVersion in ThisBuild := "2.12.3"
-crossScalaVersions in ThisBuild := List("2.12.3", "2.11.11")
+version in ThisBuild := "1.1.2-SNAPSHOT"
+scalaVersion in ThisBuild := "2.12.6"
+crossScalaVersions in ThisBuild := List("2.12.6", "2.11.11")
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 resolvers in ThisBuild += Resolver.sonatypeRepo("releases")
 
