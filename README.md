@@ -1,5 +1,6 @@
 # scala-stripe
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f08431e50c8e4440ac307b1cdf9b288a)](https://www.codacy.com/app/matthicks/scala-stripe?utm_source=github.com&utm_medium=referral&utm_content=outr/scala-stripe&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/outr/scala-stripe.svg?branch=master)](https://travis-ci.org/outr/scala-stripe)
 [![Stories in Ready](https://badge.waffle.io/outr/scala-stripe.png?label=ready&title=Ready)](https://waffle.io/outr/scala-stripe)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/outr/scala-stripe)
