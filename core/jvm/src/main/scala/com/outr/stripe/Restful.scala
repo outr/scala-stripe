@@ -1,10 +1,8 @@
 package com.outr.stripe
 
-import java.util.Base64
-
 import io.circe.Decoder
 import io.youi.client.HttpClient
-import io.youi.http.{Content, Headers, HttpRequest, HttpResponse, Method, Status, StringContent}
+import io.youi.http.{Content, Headers, HttpRequest, HttpResponse, HttpStatus, Method, StringContent}
 import io.youi.net.{ContentType, Parameters, URL}
 
 import scala.collection.mutable.ListBuffer
@@ -43,7 +41,7 @@ trait Restful extends Implicits {
                                  data: Seq[(String, String)])
                                 (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
     call(method, endPoint = endPoint, config = config, data = data).map { response =>
-      if (response.status == Status.OK) {
+      if (response.status == HttpStatus.OK) {
         Right(Pickler.read[R](response.content.get.asInstanceOf[StringContent].value))
       } else {
         val wrapper = Pickler.read[ErrorMessageWrapper](response.content.get.asInstanceOf[StringContent].value)
@@ -52,7 +50,7 @@ trait Restful extends Implicits {
     }
   }
 
-  private lazy val client = new HttpClient()
+  private lazy val client = HttpClient()
   private lazy val authorization = s"Bearer $apiKey"
 
   private[stripe] def call(method: Method,
@@ -84,7 +82,7 @@ trait Restful extends Implicits {
     client.send(request)
   }
 
-  def dispose(): Unit = client.dispose()
+  def dispose(): Unit = {}
 }
 
 case class ResponseError(text: String, code: Int, error: ErrorMessage)

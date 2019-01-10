@@ -1,9 +1,6 @@
 package com.outr.stripe.bank
 
-import com.outr.stripe.TokenError
-
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
 
 @js.native
 trait StripeBank extends js.Object {

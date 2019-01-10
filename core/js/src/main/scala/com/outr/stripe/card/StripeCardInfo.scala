@@ -1,9 +1,7 @@
 package com.outr.stripe.card
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
 
-@ScalaJSDefined
 trait StripeCardInfo extends js.Object {
   var name: js.UndefOr[String] = js.undefined
   var number: js.UndefOr[String] = js.undefined

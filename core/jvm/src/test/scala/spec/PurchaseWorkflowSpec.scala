@@ -45,7 +45,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       }
     }
     "create a credit card token" in {
-      val card = Card.create("4242424242424242", 12, 2017)
+      val card = Card.create("4242424242424242", 12, 2020)
       TestStripe.tokens.create(card = Some(card)).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(token) => {
@@ -62,7 +62,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
         case Right(card) => {
           card.number should be(None)
           card.expMonth should be(12)
-          card.expYear should be(2017)
+          card.expYear should be(2020)
           creditCardId = Option(card.id)
           creditCardId shouldNot be(None)
         }

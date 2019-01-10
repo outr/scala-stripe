@@ -1,9 +1,7 @@
 package com.outr.stripe.bank
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
 
-@ScalaJSDefined
 trait StripeBankInfo extends js.Object {
   var country: js.UndefOr[String] = js.undefined
   var currency: js.UndefOr[String] = js.undefined

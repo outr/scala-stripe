@@ -3,14 +3,12 @@ package com.outr.stripe.pii
 import com.outr.stripe.TokenError
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation.ScalaJSDefined
 
 @js.native
 trait StripePII extends js.Object {
   def createToken(info: StripePIIInfo, responseHandler: js.Function2[Int, PIITokenInfo, Unit]): Unit = js.native
 }
 
-@ScalaJSDefined
 trait StripePIIInfo extends js.Object {
   var personal_id_number: js.UndefOr[String] = js.undefined
 }
