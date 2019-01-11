@@ -1,6 +1,6 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.connect.{Acceptance, Account, DeclineChargesOn, LegalEntity, TransferSchedule}
+import com.outr.stripe.connect.{Acceptance, Account, DeclineChargeOn, LegalEntity, TransferSchedule}
 import com.outr.stripe.{Deleted, Implicits, QueryConfig, ResponseError, Stripe, StripeList}
 
 import scala.concurrent.Future
@@ -13,7 +13,9 @@ class AccountsSupport(stripe: Stripe) extends Implicits {
              businessLogo: Option[String] = None,
              businessName: Option[String] = None,
              businessPrimaryColor: Option[String] = None,
-             businessURL: Option[String] = None): Future[Either[ResponseError, Account]] = {
+             businessURL: Option[String] = None,
+             legalEntity: Option[LegalEntity] = None,
+             tosAcceptance: Option[Acceptance] = None): Future[Either[ResponseError, Account]] = {
     val data = List(
       write("type", if (custom) "custom" else "standard"),
       write("country", country),
@@ -22,7 +24,9 @@ class AccountsSupport(stripe: Stripe) extends Implicits {
       write("business_logo", businessLogo),
       write("business_name", businessName),
       write("business_primary_color", businessPrimaryColor),
-      write("businessURL", businessURL)
+      write("businessURL", businessURL),
+      write("legal_entity", legalEntity),
+      write("tos_acceptance", tosAcceptance)
     ).flatten
     stripe.post[Account]("accounts", QueryConfig.default, data: _*)
   }
@@ -37,7 +41,7 @@ class AccountsSupport(stripe: Stripe) extends Implicits {
              businessPrimaryColor: Option[String] = None,
              businessUrl: Option[String] = None,
              debitNegativeBalances: Option[Boolean] = None,
-             declineChargeOn: Option[DeclineChargesOn] = None,
+             declineChargeOn: Option[DeclineChargeOn] = None,
              defaultCurrency: Option[String] = None,
              email: Option[String] = None,
              externalAccount: Option[String] = None,

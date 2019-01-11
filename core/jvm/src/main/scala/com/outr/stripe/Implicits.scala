@@ -2,7 +2,7 @@ package com.outr.stripe
 
 import com.outr.stripe.balance.{Balance, BalanceEntry, BalanceTransaction, FeeDetail, Reversal, SourceType}
 import com.outr.stripe.charge.{Address, BankAccount, Card, Charge, FraudDetails, Outcome, PII, Rule, Shipping}
-import com.outr.stripe.connect.{Acceptance, Account, AccountVerification, AddressKana, AddressKanji, ApplicationFee, CountrySpec, Date, DeclineChargesOn, FeeRefund, Keys, LegalEntity, TransferSchedule, Verification, VerificationFields}
+import com.outr.stripe.connect.{Acceptance, Account, AccountVerification, AddressKana, AddressKanji, ApplicationFee, CountrySpec, Date, DeclineChargeOn, FeeRefund, Keys, LegalEntity, TransferSchedule, Verification, VerificationFields}
 import com.outr.stripe.customer.{Customer, Discount}
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence, EvidenceDetails}
 import com.outr.stripe.event.{Event, EventData}
@@ -84,7 +84,7 @@ trait Implicits {
   protected implicit val invoiceItemListDecoder: Decoder[StripeList[InvoiceItem]] = deriveDecoder[StripeList[InvoiceItem]]
   protected implicit val errorMessageWrapperDecoder: Decoder[ErrorMessageWrapper] = deriveDecoder[ErrorMessageWrapper]
   protected implicit val errorMessageDecoder: Decoder[ErrorMessage] = deriveDecoder[ErrorMessage]
-  protected implicit val declineChargesOnDecoder: Decoder[DeclineChargesOn] = deriveDecoder[DeclineChargesOn]
+  protected implicit val declineChargesOnDecoder: Decoder[DeclineChargeOn] = deriveDecoder[DeclineChargeOn]
   protected implicit val legalEntityDecoder: Decoder[LegalEntity] = deriveDecoder[LegalEntity]
   protected implicit val acceptanceDecoder: Decoder[Acceptance] = deriveDecoder[Acceptance]
   protected implicit val transferScheduleDecoder: Decoder[TransferSchedule] = deriveDecoder[TransferSchedule]
@@ -136,12 +136,12 @@ trait Implicits {
   protected implicit val addressEncoder: MapEncoder[Address] = new MapEncoder[Address] {
     override def encode(key: String, value: Address): Map[String, String] = Map(
       s"$key[city]" -> value.city,
-      s"$key[country]" -> value.country,
+      s"$key[country]" -> Option(value.country),
       s"$key[line1]" -> value.line1,
       s"$key[line2]" -> value.line2,
       s"$key[postal_code]" -> value.postalCode,
       s"$key[state]" -> value.state
-    )
+    ).flatMap(t => t._2.map(t._1 -> _))
   }
   protected implicit val addressKanaEncoder: MapEncoder[AddressKana] = new MapEncoder[AddressKana] {
     override def encode(key: String, value: AddressKana): Map[String, String] = Map(
@@ -196,18 +196,18 @@ trait Implicits {
       s"$key[personal_id_number]" -> value.personalIdNumber
     )
   }
-  protected implicit val declineChargesOnEncoder: MapEncoder[DeclineChargesOn] = new MapEncoder[DeclineChargesOn] {
-    override def encode(key: String, value: DeclineChargesOn): Map[String, String] = Map(
+  protected implicit val declineChargesOnEncoder: MapEncoder[DeclineChargeOn] = new MapEncoder[DeclineChargeOn] {
+    override def encode(key: String, value: DeclineChargeOn): Map[String, String] = Map(
       s"$key[avs_failure]" -> value.avsFailure.toString,
       s"$key[cvc_failure]" -> value.cvcFailure.toString
     )
   }
   protected implicit val dateEncoder: MapEncoder[Date] = new MapEncoder[Date] {
-    override def encode(key: String, value: Date): Map[String, String] = Map(
-      s"$key[day]" -> value.day.toString,
-      s"$key[month]" -> value.month.toString,
-      s"$key[year]" -> value.year.toString
-    )
+    override def encode(key: String, value: Date): Map[String, String] = List(
+      write(s"$key[day]", value.day),
+      write(s"$key[month]", value.month),
+      write(s"$key[year]", value.year)
+    ).flatten.toMap
   }
   protected implicit val legalEntityEncoder: MapEncoder[LegalEntity] = new MapEncoder[LegalEntity] {
     override def encode(key: String, value: LegalEntity): Map[String, String] = List(
