@@ -8,11 +8,21 @@ import scala.concurrent.Future
 class AccountsSupport(stripe: Stripe) extends Implicits {
   def create(country: Option[String] = None,
              email: Option[String] = None,
-             managed: Boolean = false): Future[Either[ResponseError, Account]] = {
+             custom: Boolean = false,
+             accountToken: Option[String] = None,
+             businessLogo: Option[String] = None,
+             businessName: Option[String] = None,
+             businessPrimaryColor: Option[String] = None,
+             businessURL: Option[String] = None): Future[Either[ResponseError, Account]] = {
     val data = List(
+      write("type", if (custom) "custom" else "standard"),
       write("country", country),
       write("email", email),
-      write("managed", managed, default = true)
+      write("account_token", accountToken),
+      write("business_logo", businessLogo),
+      write("business_name", businessName),
+      write("business_primary_color", businessPrimaryColor),
+      write("businessURL", businessURL)
     ).flatten
     stripe.post[Account]("accounts", QueryConfig.default, data: _*)
   }
