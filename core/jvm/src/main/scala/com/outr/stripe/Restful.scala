@@ -2,7 +2,8 @@ package com.outr.stripe
 
 import io.circe.Decoder
 import io.youi.client.HttpClient
-import io.youi.http.{Content, Headers, HttpRequest, HttpResponse, HttpStatus, Method, StringContent}
+import io.youi.http.content.{Content, StringContent}
+import io.youi.http.{Headers, HttpRequest, HttpResponse, HttpStatus, Method}
 import io.youi.net.{ContentType, Parameters, URL}
 
 import scala.collection.mutable.ListBuffer
