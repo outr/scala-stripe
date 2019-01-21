@@ -90,4 +90,4 @@ case class ResponseError(text: String, code: Int, error: ErrorMessage)
 
 case class ErrorMessageWrapper(error: ErrorMessage)
 
-case class ErrorMessage(message: String, `type`: String, param: String, code: String)
+case class ErrorMessage(message: String, `type`: String, param: Option[String], code: Option[String])
