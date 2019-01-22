@@ -24,7 +24,7 @@ class AccountsSupport(stripe: Stripe) extends Implicits {
       write("business_logo", businessLogo),
       write("business_name", businessName),
       write("business_primary_color", businessPrimaryColor),
-      write("businessURL", businessURL),
+      write("business_url", businessURL),
       write("legal_entity", legalEntity),
       write("tos_acceptance", tosAcceptance)
     ).flatten
