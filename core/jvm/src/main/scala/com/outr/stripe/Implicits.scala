@@ -233,7 +233,7 @@ trait Implicits {
       write(s"$key[personal_address_kanji]", value.personalAddressKanji),
       write(s"$key[personal_id_number_provided]", value.personalIdNumberProvided),
       write(s"$key[phone_number]", value.phoneNumber),
-      write(s"$key[ssn_last_4]", value.sslLast4),
+      write(s"$key[ssn_last_4]", value.ssnLast4),
       write(s"$key[type]", value.`type`),
       write(s"$key[verification]", value.verification)
     ).flatten.toMap
