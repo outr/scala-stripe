@@ -37,9 +37,9 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
           failure.code should be(402)
           failure.text should be("Payment Required")
           failure.error.`type` should be("card_error")
-          failure.error.code should be("incorrect_number")
+          failure.error.code should be(Some("incorrect_number"))
           failure.error.message should be("Your card number is incorrect.")
-          failure.error.param should be("number")
+          failure.error.param should be(Some("number"))
         }
         case Right(_) => fail("Was supposed to fail, but did not!")
       }

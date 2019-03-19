@@ -2,9 +2,9 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.1.6"
-scalaVersion in ThisBuild := "2.12.7"
-crossScalaVersions in ThisBuild := List("2.12.7", "2.11.11")
+version in ThisBuild := "1.1.7-SNAPSHOT"
+scalaVersion in ThisBuild := "2.12.8"
+crossScalaVersions in ThisBuild := List("2.12.8", "2.11.11")
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 resolvers in ThisBuild += Resolver.sonatypeRepo("releases")
 
@@ -24,7 +24,7 @@ developers in ThisBuild := List(
   Developer(id="darkfrog", name="Matt Hicks", email="matt@matthicks.com", url=url("http://matthicks.com"))
 )
 
-val youiVersion = "0.9.10"
+val youiVersion = "0.10.10"
 
 lazy val root = project.in(file("."))
   .aggregate(coreJS, coreJVM)
@@ -33,7 +33,7 @@ lazy val root = project.in(file("."))
     publishLocal := {}
   )
 
-lazy val core = crossProject.in(file("core"))
+lazy val core = crossProject(JVMPlatform, JSPlatform).in(file("core"))
   .settings(
     name := "scala-stripe",
     libraryDependencies += "org.scalactic" %%% "scalactic" % "3.0.5",
