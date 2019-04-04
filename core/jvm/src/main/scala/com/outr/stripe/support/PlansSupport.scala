@@ -10,20 +10,21 @@ class PlansSupport(stripe: Stripe) extends Implicits {
              amount: Money,
              currency: String,
              interval: String,
-             name: String,
+             product: Map[String, String],
              intervalCount: Int = 1,
              metadata: Map[String, String] = Map.empty,
-             statementDescriptor: Option[String] = None,
+             nickname: Option[String],
              trialPeriodDays: Option[Int] = None): Future[Either[ResponseError, Plan]] = {
     val data = List(
       write("id", planId),
       write("amount", amount),
       write("currency", currency),
       write("interval", interval),
-      write("name", name),
+      write("product", product),
       write("interval_count", intervalCount),
-      write("statement_descriptor", statementDescriptor),
-      write("trial_period_days", trialPeriodDays)
+      write("metadata", metadata),
+      write("trial_period_days", trialPeriodDays),
+      write("nickname", nickname)
     ).flatten
     stripe.post[Plan]("plans", QueryConfig.default, data: _*)
   }
