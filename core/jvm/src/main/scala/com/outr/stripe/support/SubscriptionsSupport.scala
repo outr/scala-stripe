@@ -7,10 +7,10 @@ import scala.concurrent.Future
 
 class SubscriptionsSupport(stripe: Stripe) extends Implicits {
   def create(customerId: String,
+             items: List[Map[String, String]],
              applicationFeePercent: Option[BigDecimal] = None,
              coupon: Option[String] = None,
              metadata: Map[String, String] = Map.empty,
-             plan: Option[String] = None,
              prorate: Option[Boolean] = None,
              quantity: Option[Int] = None,
              source: Option[String] = None,
@@ -19,10 +19,10 @@ class SubscriptionsSupport(stripe: Stripe) extends Implicits {
              trialPeriodDays: Option[Int] = None): Future[Either[ResponseError, Subscription]] = {
     val data = List(
       write("customer", customerId),
+      write("items", items),
       write("application_fee_percent", applicationFeePercent),
       write("coupon", coupon),
       write("metadata", metadata),
-      write("plan", plan),
       write("prorate", prorate),
       write("quantity", quantity),
       write("source", source),
@@ -38,10 +38,10 @@ class SubscriptionsSupport(stripe: Stripe) extends Implicits {
   }
 
   def update(subscriptionId: String,
+             items: Option[List[Map[String, String]]] = None,
              applicationFeePercent: Option[BigDecimal] = None,
              coupon: Option[String] = None,
              metadata: Map[String, String] = Map.empty,
-             plan: Option[String] = None,
              prorate: Option[Boolean] = None,
              prorationDate: Option[Long] = None,
              quantity: Option[Int] = None,
@@ -53,7 +53,7 @@ class SubscriptionsSupport(stripe: Stripe) extends Implicits {
       write("application_fee_percent", applicationFeePercent),
       write("coupon", coupon),
       write("metadata", metadata),
-      write("plan", plan),
+      write("items", items),
       write("prorate", prorate),
       write("quantity", quantity),
       write("source", source),

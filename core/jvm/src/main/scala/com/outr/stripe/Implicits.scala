@@ -306,4 +306,9 @@ trait Implicits {
       case (s, index) => s"$key[$index]" -> s
     }.toMap
   }
+  protected implicit val mapListEncoder: MapEncoder[List[Map[String, String]]] = new MapEncoder[List[Map[String, String]]] {
+    override def encode(key: String, value: List[Map[String, String]]): Map[String, String] = value.zipWithIndex.flatMap {
+      case (map, index) => mapEncoder.encode(s"$key[$index]", map)
+    }.toMap
+  }
 }
