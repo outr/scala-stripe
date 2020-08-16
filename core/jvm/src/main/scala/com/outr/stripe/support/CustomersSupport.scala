@@ -69,9 +69,11 @@ class CustomersSupport(stripe: Stripe) extends Implicits {
   }
 
   def list(created: Option[TimestampFilter] = None,
-           config: QueryConfig = QueryConfig.default): Future[Either[ResponseError, StripeList[Customer]]] = {
+           config: QueryConfig = QueryConfig.default,
+           email: Option[String] = None): Future[Either[ResponseError, StripeList[Customer]]] = {
     val data = List(
-      write("created", created)
+      write("created", created),
+      write("email", email)
     ).flatten
     stripe.get[StripeList[Customer]]("customers", config, data: _*)
   }
