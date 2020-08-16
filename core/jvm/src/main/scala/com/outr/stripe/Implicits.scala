@@ -6,6 +6,8 @@ import com.outr.stripe.connect.{Acceptance, Account, AccountVerification, Addres
 import com.outr.stripe.customer.{Customer, Discount}
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence, EvidenceDetails}
 import com.outr.stripe.event.{Event, EventData}
+import com.outr.stripe.product.PackageDimensions
+import com.outr.stripe.product.{Product => StripeProduct}
 import com.outr.stripe.refund.Refund
 import com.outr.stripe.subscription.{Coupon, Invoice, InvoiceItem, InvoiceLine, Plan, Subscription}
 import com.outr.stripe.token.Token
@@ -38,6 +40,9 @@ trait Implicits {
   protected implicit val balanceTransactionListDecoder: Decoder[StripeList[BalanceTransaction]] = deriveDecoder[StripeList[BalanceTransaction]]
   protected implicit val transferListDecoder: Decoder[StripeList[Transfer]] = deriveDecoder[StripeList[Transfer]]
   protected implicit val tokenDecoder: Decoder[Token] = deriveDecoder[Token]
+  protected implicit val packageDimensionDecoder: Decoder[PackageDimensions] = deriveDecoder[PackageDimensions]
+  protected implicit val productListDecoder: Decoder[StripeList[StripeProduct]] = deriveDecoder[StripeList[StripeProduct]]
+  protected implicit val productDecoder: Decoder[StripeProduct] = deriveDecoder[StripeProduct]
   protected implicit val refundListDecoder: Decoder[StripeList[Refund]] = deriveDecoder[StripeList[Refund]]
   protected implicit val refundDecoder: Decoder[Refund] = deriveDecoder[Refund]
   protected implicit val eventListDecoder: Decoder[StripeList[Event]] = deriveDecoder[StripeList[Event]]
@@ -300,6 +305,14 @@ trait Implicits {
       write(s"$key[uncategorized_file]", value.uncategorizedFile),
       write(s"$key[uncategorized_text]", value.uncategorizedText)
     ).flatten.toMap
+  }
+  protected implicit val packageDimensionsEncoder: MapEncoder[PackageDimensions] = new MapEncoder[PackageDimensions] {
+    override def encode(key: String, value: PackageDimensions): Map[String, String] = List(
+      write(s"$key[height]", value.height),
+      write(s"$key[length]", value.length),
+      write(s"$key[weight]", value.weight),
+      write(s"$key[width]", value.width)
+     ).flatten.toMap
   }
   protected implicit val stringListEncoder: MapEncoder[List[String]] = new MapEncoder[List[String]] {
     override def encode(key: String, value: List[String]): Map[String, String] = value.zipWithIndex.map {

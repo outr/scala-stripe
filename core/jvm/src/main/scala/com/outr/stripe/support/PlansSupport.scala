@@ -10,7 +10,7 @@ class PlansSupport(stripe: Stripe) extends Implicits {
              amount: Money,
              currency: String,
              interval: String,
-             product: Map[String, String],
+             productId: String,
              intervalCount: Int = 1,
              metadata: Map[String, String] = Map.empty,
              nickname: Option[String],
@@ -20,7 +20,7 @@ class PlansSupport(stripe: Stripe) extends Implicits {
       write("amount", amount),
       write("currency", currency),
       write("interval", interval),
-      write("product", product),
+      write("product", productId),
       write("interval_count", intervalCount),
       write("metadata", metadata),
       write("trial_period_days", trialPeriodDays),
@@ -36,11 +36,13 @@ class PlansSupport(stripe: Stripe) extends Implicits {
   def update(planId: String,
              metadata: Map[String, String] = Map.empty,
              name: Option[String] = None,
+             productId: Option[String] = None,
              statementDescriptor: Option[String] = None,
              trialPeriodDays: Option[Int] = None): Future[Either[ResponseError, Plan]] = {
     val data = List(
       write("metadata", metadata),
       write("name", name),
+      write("product", productId),
       write("statement_descriptor", statementDescriptor),
       write("trial_period_days", trialPeriodDays)
     ).flatten
@@ -51,10 +53,14 @@ class PlansSupport(stripe: Stripe) extends Implicits {
     stripe.delete[Deleted](s"plans/$planId", QueryConfig.default)
   }
 
-  def list(created: Option[TimestampFilter] = None,
-           config: QueryConfig = QueryConfig.default): Future[Either[ResponseError, StripeList[Plan]]] = {
+  def list(active: Option[Boolean] = None,
+           created: Option[TimestampFilter] = None,
+           config: QueryConfig = QueryConfig.default,
+           productId: Option[String] = None): Future[Either[ResponseError, StripeList[Plan]]] = {
     val data = List(
-      write("created", created)
+      write("active", active),
+      write("created", created),
+      write("product", productId)
     ).flatten
     stripe.get[StripeList[Plan]]("plans", config, data: _*)
   }
