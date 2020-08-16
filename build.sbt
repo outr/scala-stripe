@@ -3,8 +3,8 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
 version in ThisBuild := "1.1.11"
-scalaVersion in ThisBuild := "2.12.12"
-crossScalaVersions in ThisBuild := List("2.13.3", "2.12.12", "2.11.12")
+scalaVersion in ThisBuild := "2.13.3"
+crossScalaVersions in ThisBuild := List("2.13.3", "2.12.12")
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 resolvers in ThisBuild += Resolver.sonatypeRepo("releases")
 

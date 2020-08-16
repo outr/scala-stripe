@@ -18,8 +18,8 @@ For more information on Stripe.js see https://stripe.com/docs/stripe.js
 scala-stripe is published to Sonatype OSS and Maven Central and supports JVM and Scala.js with 2.11 and 2.12:
 
 ```
-libraryDependencies += "com.outr" %% "scala-stripe" % "1.1.0"   // Scala
-libraryDependencies += "com.outr" %%% "scala-stripe" % "1.1.0"  // Scala.js / Cross-Build
+libraryDependencies += "com.outr" %% "scala-stripe" % "1.1.11"   // Scala
+libraryDependencies += "com.outr" %%% "scala-stripe" % "1.1.11"  // Scala.js / Cross-Build
 ```
 
 ## Dependencies
