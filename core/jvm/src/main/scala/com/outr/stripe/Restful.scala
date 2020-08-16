@@ -3,7 +3,7 @@ package com.outr.stripe
 import io.circe.Decoder
 import io.youi.client.HttpClient
 import io.youi.http.content.{Content, StringContent}
-import io.youi.http.{Headers, HttpResponse, HttpStatus, Method}
+import io.youi.http.{Headers, HttpResponse, HttpStatus, HttpMethod}
 import io.youi.net.{ContentType, Parameters, URL}
 
 import scala.collection.mutable.ListBuffer
@@ -19,24 +19,24 @@ trait Restful extends Implicits {
                              config: QueryConfig,
                              data: (String, String)*)
                             (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
-    process[R](Method.Get, endPoint = endPoint, config = config, data = data)
+    process[R](HttpMethod.Get, endPoint = endPoint, config = config, data = data)
   }
 
   private[stripe] def post[R](endPoint: String,
                               config: QueryConfig,
                               data: (String, String)*)
                              (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
-    process[R](Method.Post, endPoint = endPoint, config = config, data = data)
+    process[R](HttpMethod.Post, endPoint = endPoint, config = config, data = data)
   }
 
   private[stripe] def delete[R](endPoint: String,
                                 config: QueryConfig,
                                 data: (String, String)*)
                                (implicit decoder: Decoder[R], manifest: Manifest[R]): Future[Either[ResponseError, R]] = {
-    process[R](Method.Delete, endPoint = endPoint, config = config, data = data)
+    process[R](HttpMethod.Delete, endPoint = endPoint, config = config, data = data)
   }
 
-  private[stripe] def process[R](method: Method,
+  private[stripe] def process[R](method: HttpMethod,
                                  endPoint: String,
                                  config: QueryConfig,
                                  data: Seq[(String, String)])
@@ -54,7 +54,7 @@ trait Restful extends Implicits {
   private lazy val client = HttpClient
   private lazy val authorization = s"Bearer $apiKey"
 
-  private[stripe] def call(method: Method,
+  private[stripe] def call(method: HttpMethod,
                            endPoint: String,
                            config: QueryConfig,
                            data: Seq[(String, String)]): Future[HttpResponse] = {
@@ -72,7 +72,7 @@ trait Restful extends Implicits {
     args.foreach {
       case (key, value) => url = url.withParam(key, value)
     }
-    val content = if (method == Method.Post) {
+    val content = if (method == HttpMethod.Post) {
       val params = url.parameters.encoded.substring(1)
       url = url.copy(parameters = Parameters.empty)
       Some(Content.string(params, ContentType.`application/x-www-form-urlencoded`))

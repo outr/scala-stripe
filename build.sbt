@@ -2,9 +2,9 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.1.10"
-scalaVersion in ThisBuild := "2.12.8"
-crossScalaVersions in ThisBuild := List("2.12.8", "2.11.11")
+version in ThisBuild := "1.1.11"
+scalaVersion in ThisBuild := "2.12.12"
+crossScalaVersions in ThisBuild := List("2.13.3", "2.12.12", "2.11.12")
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 resolvers in ThisBuild += Resolver.sonatypeRepo("releases")
 
@@ -24,7 +24,7 @@ developers in ThisBuild := List(
   Developer(id="darkfrog", name="Matt Hicks", email="matt@matthicks.com", url=url("http://matthicks.com"))
 )
 
-val youiVersion = "0.10.13"
+val youiVersion = "0.13.16"
 
 lazy val root = project.in(file("."))
   .aggregate(coreJS, coreJVM)
@@ -36,8 +36,8 @@ lazy val root = project.in(file("."))
 lazy val core = crossProject(JVMPlatform, JSPlatform).in(file("core"))
   .settings(
     name := "scala-stripe",
-    libraryDependencies += "org.scalactic" %%% "scalactic" % "3.0.5",
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.5" % "test"
+    libraryDependencies += "org.scalactic" %%% "scalactic" % "3.2.1",
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.1" % "test"
   )
   .jvmSettings(
     fork := true,
@@ -46,10 +46,8 @@ lazy val core = crossProject(JVMPlatform, JSPlatform).in(file("core"))
     )
   )
   .jsSettings(
-    jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv,
-    skip in packageJSDependencies := false,
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.6",
-    scalacOptions += "-P:scalajs:sjsDefinedByDefault"
+    jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.1.0"
   )
 
 lazy val coreJS = core.js
