@@ -21,7 +21,7 @@ class ProductsSupport(stripe: Stripe) extends Implicits {
              statementDescriptor: Option[String] = None,
              `type`: Option[String] = None,
              unitLabel: Option[String] = None,
-             url: Option[String] = None): Future[Either[ResponseError, Product]] = {
+             url: Option[String] = None): Future[Either[ResponseError, StripeProduct]] = {
     val data = List(
       write("id", productId),
       write("name", name),
