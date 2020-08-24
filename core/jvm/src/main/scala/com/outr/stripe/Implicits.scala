@@ -9,7 +9,7 @@ import com.outr.stripe.event.{Event, EventData}
 import com.outr.stripe.product.PackageDimensions
 import com.outr.stripe.product.{Product => StripeProduct}
 import com.outr.stripe.refund.Refund
-import com.outr.stripe.subscription.{Coupon, Invoice, InvoiceItem, InvoiceLine, Plan, Subscription}
+import com.outr.stripe.subscription.{Coupon, Invoice, InvoiceItem, InvoiceLine, Plan, Subscription, SubscriptionItem}
 import com.outr.stripe.token.Token
 import com.outr.stripe.transfer.{SourcedTransfers, Transfer, TransferReversal}
 import io.circe.Decoder.Result
@@ -69,6 +69,8 @@ trait Implicits {
   protected implicit val bankAccountListDecoder: Decoder[StripeList[BankAccount]] = deriveDecoder[StripeList[BankAccount]]
   protected implicit val subscriptionDecoder: Decoder[Subscription] = deriveDecoder[Subscription]
   protected implicit val subscriptionListDecoder: Decoder[StripeList[Subscription]] = deriveDecoder[StripeList[Subscription]]
+  protected implicit val subscriptionItemDecoder: Decoder[SubscriptionItem] = deriveDecoder[SubscriptionItem]
+  protected implicit val subscriptionItemListDecoder: Decoder[StripeList[SubscriptionItem]] = deriveDecoder[StripeList[SubscriptionItem]]
   protected implicit val planDecoder: Decoder[Plan] = deriveDecoder[Plan]
   protected implicit val planListDecoder: Decoder[StripeList[Plan]] = deriveDecoder[StripeList[Plan]]
   protected implicit val transferReversalDecoder: Decoder[TransferReversal] = deriveDecoder[TransferReversal]
