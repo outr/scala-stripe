@@ -1,37 +1,43 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.charge.{Card, Shipping}
+import com.outr.stripe.charge.{Address, Card, Shipping}
 import com.outr.stripe.customer.Customer
 import com.outr.stripe.{Deleted, Implicits, Money, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
 import scala.concurrent.Future
 
 class CustomersSupport(stripe: Stripe) extends Implicits {
-  def create(accountBalance: Option[Money] = None,
-             businessVatId: Option[String] = None,
+  def create(address: Option[Address] = None,
+             balance: Option[Money] = None,
              coupon: Option[String] = None,
              description: Option[String] = None,
              email: Option[String] = None,
+             invoicePrefix: Option[String] = None,
              metadata: Map[String, String] = Map.empty,
-             plan: Option[String] = None,
-             quantity: Option[Int] = None,
+             name: Option[String] = None,
+             nextInvoiceSequence: Option[Int] = None,
+             paymentMethodId: Option[String] = None,
+             phone: Option[String] = None,
+             promotionCode: Option[String] = None,
              shipping: Option[Shipping] = None,
              source: Option[Card] = None,
-             taxPercent: Option[BigDecimal] = None,
-             trialEnd: Option[Long] = None): Future[Either[ResponseError, Customer]] = {
+             taxExempt: Option[String] = None): Future[Either[ResponseError, Customer]] = {
     val data = List(
-      write("account_balance", accountBalance),
-      write("business_vat_id", businessVatId),
+      write("address", address),
+      write("balance", balance),
       write("coupon", coupon),
       write("description", description),
       write("email", email),
+      write("invoice_prefix", invoicePrefix),
       write("metadata", metadata),
-      write("plan", plan),
-      write("quantity", quantity),
+      write("name", name),
+      write("next_invoice_sequence", nextInvoiceSequence),
+      write("payment_method", paymentMethodId),
+      write("phone", phone),
+      write("promotion_code", promotionCode),
       write("shipping", shipping),
       write("source", source),
-      write("tax_percent", taxPercent),
-      write("trial_end", trialEnd)
+      write("taxExempt", taxExempt)
     ).flatten
     stripe.post[Customer]("customers", QueryConfig.default, data: _*)
   }
@@ -41,25 +47,36 @@ class CustomersSupport(stripe: Stripe) extends Implicits {
   }
 
   def update(customerId: String,
-             accountBalance: Option[Money] = None,
-             businessVatId: Option[String] = None,
+             address: Option[Address] = None,
+             balance: Option[Money] = None,
              coupon: Option[String] = None,
              defaultSource: Option[String] = None,
              description: Option[String] = None,
              email: Option[String] = None,
+             invoicePrefix: Option[String] = None,
              metadata: Map[String, String] = Map.empty,
+             name: Option[String] = None,
+             nextInvoiceSequence: Option[Int] = None,
+             phone: Option[String] = None,
+             promotionCode: Option[String] = None,
              shipping: Option[Shipping] = None,
-             source: Option[Card] = None): Future[Either[ResponseError, Customer]] = {
+             source: Option[Card] = None,
+             taxExempt: Option[String] = None): Future[Either[ResponseError, Customer]] = {
     val data = List(
-      write("account_balance", accountBalance),
-      write("business_vat_id", businessVatId),
+      write("address", address),
+      write("balance", balance),
       write("coupon", coupon),
-      write("description", description),
+      write("default_source", defaultSource),
       write("email", email),
+      write("invoice_prefix", invoicePrefix),
       write("metadata", metadata),
+      write("name", name),
+      write("next_invoice_sequence", nextInvoiceSequence),
+      write("phone", phone),
+      write("promotion_code", promotionCode),
       write("shipping", shipping),
       write("source", source),
-      write("default_source", defaultSource)
+      write("tax_exempt", taxExempt)
     ).flatten
     stripe.post[Customer](s"customers/$customerId", QueryConfig.default, data: _*)
   }
