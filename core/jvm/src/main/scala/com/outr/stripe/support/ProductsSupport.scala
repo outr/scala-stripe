@@ -6,8 +6,7 @@ import com.outr.stripe.product.{Product => StripeProduct}
 import scala.concurrent.Future
 
 class ProductsSupport(stripe: Stripe) extends Implicits {
-  def create(productId: String,
-             name: String,
+  def create(name: String,
              active: Option[Boolean] = None,
              attributes: List[String] = List.empty,
              caption: Option[String] = None,
@@ -17,6 +16,7 @@ class ProductsSupport(stripe: Stripe) extends Implicits {
              liveMode: Option[Boolean] = None,
              metadata: Map[String, String] = Map.empty,
              packageDimensions: Option[PackageDimensions] = None,
+             productId: Option[String],
              shippable: Option[Boolean] = None,
              statementDescriptor: Option[String] = None,
              `type`: Option[String] = None,
