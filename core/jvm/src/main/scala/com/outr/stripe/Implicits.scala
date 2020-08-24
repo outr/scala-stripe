@@ -316,6 +316,15 @@ trait Implicits {
       write(s"$key[width]", value.width)
      ).flatten.toMap
   }
+  protected implicit val subscriptionItemsEncoder: MapEncoder[List[SubscriptionItem]] = new MapEncoder[List[SubscriptionItem]] {
+    override def encode(key: String, value: List[SubscriptionItem]): Map[String, String] = value.zipWithIndex.flatMap {
+      case (si, index) => List(
+        write(s"$key[$index][price]", si.price),
+        write(s"$key[$index][quantity]", si.quantity),
+        write(s"$key[$index][tax_rates]", si.taxRates)
+      ).flatten.toMap
+    }.toMap
+  }
   protected implicit val stringListEncoder: MapEncoder[List[String]] = new MapEncoder[List[String]] {
     override def encode(key: String, value: List[String]): Map[String, String] = value.zipWithIndex.map {
       case (s, index) => s"$key[$index]" -> s

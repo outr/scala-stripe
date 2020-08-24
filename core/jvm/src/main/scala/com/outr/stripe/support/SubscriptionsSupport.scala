@@ -1,13 +1,13 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.subscription.Subscription
+import com.outr.stripe.subscription.{Subscription, SubscriptionItem}
 import com.outr.stripe.{Implicits, QueryConfig, ResponseError, Stripe, StripeList, TimestampFilter}
 
 import scala.concurrent.Future
 
 class SubscriptionsSupport(stripe: Stripe) extends Implicits {
   def create(customerId: String,
-             items: List[Map[String, String]],
+             items: List[SubscriptionItem],
              applicationFeePercent: Option[BigDecimal] = None,
              coupon: Option[String] = None,
              metadata: Map[String, String] = Map.empty,
@@ -38,7 +38,7 @@ class SubscriptionsSupport(stripe: Stripe) extends Implicits {
   }
 
   def update(subscriptionId: String,
-             items: Option[List[Map[String, String]]] = None,
+             items: List[SubscriptionItem] = List(),
              applicationFeePercent: Option[BigDecimal] = None,
              coupon: Option[String] = None,
              metadata: Map[String, String] = Map.empty,
