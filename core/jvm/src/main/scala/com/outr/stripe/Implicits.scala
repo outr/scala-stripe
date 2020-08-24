@@ -6,6 +6,7 @@ import com.outr.stripe.connect.{Acceptance, Account, AccountVerification, Addres
 import com.outr.stripe.customer.{Customer, Discount}
 import com.outr.stripe.dispute.{Dispute, DisputeEvidence, EvidenceDetails}
 import com.outr.stripe.event.{Event, EventData}
+import com.outr.stripe.price.{Price, Recurring, Tier, TransformQuantity}
 import com.outr.stripe.product.PackageDimensions
 import com.outr.stripe.product.{Product => StripeProduct}
 import com.outr.stripe.refund.Refund
@@ -41,6 +42,8 @@ trait Implicits {
   protected implicit val transferListDecoder: Decoder[StripeList[Transfer]] = deriveDecoder[StripeList[Transfer]]
   protected implicit val tokenDecoder: Decoder[Token] = deriveDecoder[Token]
   protected implicit val packageDimensionDecoder: Decoder[PackageDimensions] = deriveDecoder[PackageDimensions]
+  protected implicit val priceDecoder: Decoder[Price] = deriveDecoder[Price]
+  protected implicit val priceListDecoder: Decoder[StripeList[Price]] = deriveDecoder[StripeList[Price]]
   protected implicit val productListDecoder: Decoder[StripeList[StripeProduct]] = deriveDecoder[StripeList[StripeProduct]]
   protected implicit val productDecoder: Decoder[StripeProduct] = deriveDecoder[StripeProduct]
   protected implicit val refundListDecoder: Decoder[StripeList[Refund]] = deriveDecoder[StripeList[Refund]]
@@ -313,6 +316,31 @@ trait Implicits {
       write(s"$key[weight]", value.weight),
       write(s"$key[width]", value.width)
      ).flatten.toMap
+  }
+  protected implicit val recurringEncoder: MapEncoder[Recurring] = new MapEncoder[Recurring] {
+    override def encode(key: String, value: Recurring): Map[String, String] = List(
+      write(s"$key[interval]", value.interval),
+      write(s"$key[aggregate_usage]", value.aggregateUsage),
+      write(s"$key[interval_count]", value.intervalCount),
+      write(s"$key[usage_type]", value.usageType)
+    ).flatten.toMap
+  }
+  protected implicit val tierEncoder: MapEncoder[List[Tier]] = new MapEncoder[List[Tier]] {
+    override def encode(key: String, value: List[Tier]): Map[String, String] = value.zipWithIndex.flatMap {
+      case (tier, index) => List(
+        write(s"$key[$index][up_to]", tier.upTo),
+        write(s"$key[$index][flat_amount]", tier.flatAmount),
+        write(s"$key[$index][flat_amount_decimal]", tier.flatAmountDecimal),
+        write(s"$key[$index][unit_amount]", tier.unitAmount),
+        write(s"$key[$index][unit_amount_decimal]", tier.unitAmountDecimal)
+      ).flatten.toMap
+    }.toMap
+  }
+  protected implicit val transformQuantityEncoder: MapEncoder[TransformQuantity] = new MapEncoder[TransformQuantity] {
+    override def encode(key: String, value: TransformQuantity): Map[String, String] = List(
+      write(s"$key[divide_by]", value.divideBy),
+      write(s"$key[round]", value.round)
+    ).flatten.toMap
   }
   protected implicit val stringListEncoder: MapEncoder[List[String]] = new MapEncoder[List[String]] {
     override def encode(key: String, value: List[String]): Map[String, String] = value.zipWithIndex.map {
