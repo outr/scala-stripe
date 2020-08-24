@@ -1,6 +1,5 @@
 package com.outr.stripe.support
 
-import com.outr.stripe.subscription.Plan
 import com.outr.stripe._
 import com.outr.stripe.price.{Price, Recurring, Tier, TransformQuantity}
 
