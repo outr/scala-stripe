@@ -74,7 +74,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       TestStripe.charges.create(Money(5), "USD", customer = customerId).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
         case Right(charge) => {
-          charge.amount should be(Money(500L))
+          charge.amount.pennies should be(Money(500L).pennies)
           charge.captured should be(true)
           charge.failureCode should be(None)
           charge.failureMessage should be(None)
@@ -87,7 +87,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       TestStripe.charges.create(Money(5.00), "USD", customer = customerId).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
         case Right(charge) => {
-          charge.amount should be(Money(500L))
+          charge.amount.pennies  should be(Money(500L).pennies )
           charge.captured should be(true)
           charge.failureCode should be(None)
           charge.failureMessage should be(None)
@@ -100,7 +100,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       TestStripe.charges.create(Money("5.00"), "USD", customer = customerId).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
         case Right(charge) => {
-          charge.amount should be(Money(500L))
+          charge.amount.pennies should be(Money(500L).pennies )
           charge.captured should be(true)
           charge.failureCode should be(None)
           charge.failureMessage should be(None)
@@ -113,7 +113,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       TestStripe.charges.create(Money("5000"), "JPY", customer = customerId).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
         case Right(charge) => {
-          charge.amount should be(Money(5000L))
+          charge.amount.pennies  should be(Money(5000L).pennies )
           charge.captured should be(true)
           charge.failureCode should be(None)
           charge.failureMessage should be(None)
@@ -126,7 +126,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       TestStripe.charges.create(Money("500"), "JPY", customer = customerId).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
         case Right(charge) => {
-          charge.amount should be(Money(500L))
+          charge.amount.pennies  should be(Money(500L).pennies )
           charge.captured should be(true)
           charge.failureCode should be(None)
           charge.failureMessage should be(None)

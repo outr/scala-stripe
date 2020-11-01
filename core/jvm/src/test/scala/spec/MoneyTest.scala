@@ -54,9 +54,9 @@ class MoneyTest  extends AsyncWordSpec with Matchers with Implicits {
         write("", Money("5"))(moneyEncoder) should be(Map(""->"5"))
         write("", Money(5.00))(moneyEncoder) should be(Map(""->"500"))
         write("", Money(5))(moneyEncoder) should be(Map(""->"500"))
-        write("", Money(BigDecimal(5)setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
-        write("", Money(BigDecimal("5")setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
-        write("", Money(BigDecimal("5.0")setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
-        write("", Money(BigDecimal("5.00")setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
+        write("", Money(BigDecimal(5).setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
+        write("", Money(BigDecimal("5").setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
+        write("", Money(BigDecimal("5.0").setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
+        write("", Money(BigDecimal("5.00").setScale(2,BigDecimal.RoundingMode.HALF_EVEN)))(moneyEncoder) should be(Map(""->"500"))
       }
 }
