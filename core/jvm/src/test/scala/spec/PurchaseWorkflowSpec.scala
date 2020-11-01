@@ -70,9 +70,9 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
         }
       }
     }
-    "make a purchase with the test customer" in {
-      TestStripe.charges.create(Money(5.0), "USD", customer = customerId).map {
-        case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
+    "make a purchase with the test customer USD no pennies" in {
+      TestStripe.charges.create(Money(5), "USD", customer = customerId).map {
+        case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
         case Right(charge) => {
           charge.amount should be(Money(500L))
           charge.captured should be(true)
@@ -81,6 +81,65 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
           charge.source.id should be(creditCardId.get)
           charge.status should be("succeeded")
         }
+      }
+    }
+    "make a purchase with the test customer USD pennies" in {
+      TestStripe.charges.create(Money(5.00), "USD", customer = customerId).map {
+        case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
+        case Right(charge) => {
+          charge.amount should be(Money(500L))
+          charge.captured should be(true)
+          charge.failureCode should be(None)
+          charge.failureMessage should be(None)
+          charge.source.id should be(creditCardId.get)
+          charge.status should be("succeeded")
+        }
+      }
+    }
+    "make a purchase with the test customer USD pennies String" in {
+      TestStripe.charges.create(Money("5.00"), "USD", customer = customerId).map {
+        case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
+        case Right(charge) => {
+          charge.amount should be(Money(500L))
+          charge.captured should be(true)
+          charge.failureCode should be(None)
+          charge.failureMessage should be(None)
+          charge.source.id should be(creditCardId.get)
+          charge.status should be("succeeded")
+        }
+      }
+    }
+    "make a purchase with the test customer JPY" in {
+      TestStripe.charges.create(Money("5000"), "JPY", customer = customerId).map {
+        case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
+        case Right(charge) => {
+          charge.amount should be(Money(5000L))
+          charge.captured should be(true)
+          charge.failureCode should be(None)
+          charge.failureMessage should be(None)
+          charge.source.id should be(creditCardId.get)
+          charge.status should be("succeeded")
+        }
+      }
+    }
+    "make a purchase with the test customer JPY 500" in {
+      TestStripe.charges.create(Money("500"), "JPY", customer = customerId).map {
+        case Left(failure) => fail(s"Receive error response: ${failure.text} - ${failure.error} (${failure.code})")
+        case Right(charge) => {
+          charge.amount should be(Money(500L))
+          charge.captured should be(true)
+          charge.failureCode should be(None)
+          charge.failureMessage should be(None)
+          charge.source.id should be(creditCardId.get)
+          charge.status should be("succeeded")
+        }
+      }
+    }
+    "make a purchase with the test customer JPY 5" in {
+      TestStripe.charges.create(Money("5"), "JPY", customer = customerId).map {
+        case Left(failure) =>
+          failure.error.code should be("amount_too_small")
+        case Right(charge) => fail("Was supposed to fail, but did not!")
       }
     }
     "delete a credit card" in {
