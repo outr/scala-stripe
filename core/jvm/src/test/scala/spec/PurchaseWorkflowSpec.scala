@@ -2,7 +2,9 @@ package spec
 
 import com.outr.stripe.Money
 import com.outr.stripe.charge.Card
-import org.scalatest.{AsyncWordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
+import java.time.Year
 
 class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
   "Purchase Workflow" should {
@@ -31,11 +33,11 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       }
     }
     "fail to create a credit card token" in {
-      val card = Card.create("4242111111111111", 1, 2020)
+      val card = Card.create("4242111111111111", 1, Year.now.getValue - 1)
       TestStripe.tokens.create(card = Some(card)).map {
         case Left(failure) => {
           failure.code should be(402)
-          failure.text should be("Payment Required")
+          failure.text should be("") //("Payment Required")
           failure.error.`type` should be("card_error")
           failure.error.code should be(Some("incorrect_number"))
           failure.error.message should be("Your card number is incorrect.")
@@ -45,7 +47,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       }
     }
     "create a credit card token" in {
-      val card = Card.create("4242424242424242", 12, 2020)
+      val card = Card.create("4242424242424242", 12, Year.now.getValue + 1)
       TestStripe.tokens.create(card = Some(card)).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(token) => {
@@ -62,7 +64,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
         case Right(card) => {
           card.number should be(None)
           card.expMonth should be(12)
-          card.expYear should be(2020)
+          card.expYear should be(Year.now.getValue + 1)
           creditCardId = Option(card.id)
           creditCardId shouldNot be(None)
         }

@@ -1,10 +1,10 @@
 package specs
 
 import com.outr.stripe.Stripe
-import com.outr.stripe.card.{CardTokenInfo, StripeCardInfo}
-import org.scalatest.{Assertion, AsyncWordSpec, Matchers, WordSpec}
-
 import org.scalajs.dom._
+import org.scalatest.Assertion
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 
 import scala.concurrent.{Future, Promise}
 
@@ -48,7 +48,7 @@ class CardSpec extends AsyncWordSpec with Matchers {
     val script = document.createElement("script").asInstanceOf[html.Script]
     script.`type` = "text/javascript"
     script.src = "https://js.stripe.com/v2/"
-    val promise = Promise[Assertion]
+    val promise = Promise[Assertion]()
     val callback = (evt: Event) => {
       println("Callback!")
       promise.success(true should be(true))

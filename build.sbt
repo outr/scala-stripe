@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.1.11"
+version in ThisBuild := "1.1.12SNAP"
 scalaVersion in ThisBuild := "2.13.3"
 crossScalaVersions in ThisBuild := List("2.13.3", "2.12.12")
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
@@ -37,8 +37,10 @@ lazy val core = crossProject(JVMPlatform, JSPlatform).in(file("core"))
   .settings(
     name := "scala-stripe",
     libraryDependencies += "org.scalactic" %%% "scalactic" % "3.2.1",
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.1" % "test"
-  )
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.1" % "test",
+    libraryDependencies += "org.scalatest" %% "scalatest-wordspec" % "3.2.1" % "test",
+    libraryDependencies += "org.scalatest" %%% "scalatest-matchers-core" % "3.2.1" % "test",
+)
   .jvmSettings(
     fork := true,
     libraryDependencies ++= Seq(
