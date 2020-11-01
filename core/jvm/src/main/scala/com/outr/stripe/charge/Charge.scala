@@ -1,5 +1,7 @@
 package com.outr.stripe.charge
 
+import java.util.Currency
+
 import com.outr.stripe.dispute.Dispute
 import com.outr.stripe.refund.Refund
 import com.outr.stripe.{Money, StripeList}
@@ -37,4 +39,7 @@ case class Charge(id: String,
                   sourceTransfer: Option[String],
                   statementDescriptor: Option[String],
                   status: String,
-                  transfer: Option[String])
+                  transfer: Option[String]){
+  val fixAmount=Money(amount.pennies,Currency.getInstance(currency.toUpperCase()).getDefaultFractionDigits)
+  val fixAmountRefunded=Money(amountRefunded.pennies,Currency.getInstance(currency.toUpperCase()).getDefaultFractionDigits)
+}

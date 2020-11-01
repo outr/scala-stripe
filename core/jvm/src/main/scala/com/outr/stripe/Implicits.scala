@@ -24,7 +24,7 @@ trait Implicits {
   protected implicit val moneyDecoder: Decoder[Money] = new Decoder[Money] {
     override def apply(c: HCursor): Result[Money] = Decoder.decodeLong(c) match {
       case Left(failure) => Left(failure)
-      case Right(l) => Right(Money(l))
+      case Right(l) => Right(Money(l))//missing scale information
     }
   }
   protected implicit val transferDecoder: Decoder[Transfer] = deriveDecoder[Transfer]
