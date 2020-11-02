@@ -1,17 +1,15 @@
 package specs
 
 import com.outr.stripe.Stripe
-import com.outr.stripe.card.{CardTokenInfo, StripeCardInfo}
-import org.scalatest.{Assertion, AsyncWordSpec, Matchers, WordSpec}
-
+import org.scalatest.Assertion
 import org.scalajs.dom._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 
-import scala.concurrent.{Future, Promise}
-
-//import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 class CardSpec extends AsyncWordSpec with Matchers {
-  implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
+  implicit override def executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   "Stripe Card API" should {
     "load Stripe.js" in {

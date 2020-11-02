@@ -2,7 +2,8 @@ package spec
 
 import com.outr.stripe.Money
 import com.outr.stripe.charge.Card
-import org.scalatest.{AsyncWordSpec, Matchers}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 
 class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
   "Purchase Workflow" should {
@@ -11,7 +12,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
     var creditCardId: Option[String] = None
 
     "create a test customer" in {
-      TestStripe.customers.create(email = Some("test@test.com"), description = Some("test user")).map {
+      TestStripe().customers.create(email = Some("test@test.com"), description = Some("test user")).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(customer) => {
           customer.email should be(Some("test@test.com"))
@@ -22,7 +23,7 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       }
     }
     "lookup the test customer" in {
-      TestStripe.customers.byId(customerId.get).map {
+      TestStripe().customers.byId(customerId.get).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(customer) => {
           customer.id should be(customerId.get)
@@ -32,10 +33,9 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
     }
     "fail to create a credit card token" in {
       val card = Card.create("4242111111111111", 1, 2020)
-      TestStripe.tokens.create(card = Some(card)).map {
+      TestStripe().tokens.create(card = Some(card)).map {
         case Left(failure) => {
           failure.code should be(402)
-          failure.text should be("Payment Required")
           failure.error.`type` should be("card_error")
           failure.error.code should be(Some("incorrect_number"))
           failure.error.message should be("Your card number is incorrect.")
@@ -45,8 +45,8 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       }
     }
     "create a credit card token" in {
-      val card = Card.create("4242424242424242", 12, 2020)
-      TestStripe.tokens.create(card = Some(card)).map {
+      val card = Card.create("4242424242424242", 12, 2040)
+      TestStripe().tokens.create(card = Some(card)).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(token) => {
           token.`type` should be("card")
@@ -57,19 +57,19 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       }
     }
     "store the credit card with the test customer" in {
-      TestStripe.customers.sources.cards.create(customerId.get, creditCardTokenId).map {
+      TestStripe().customers.sources.cards.create(customerId.get, creditCardTokenId).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(card) => {
           card.number should be(None)
           card.expMonth should be(12)
-          card.expYear should be(2020)
+          card.expYear should be(2040)
           creditCardId = Option(card.id)
           creditCardId shouldNot be(None)
         }
       }
     }
     "make a purchase with the test customer" in {
-      TestStripe.charges.create(Money(5.0), "USD", customer = customerId).map {
+      TestStripe().charges.create(Money(5.0), "USD", customer = customerId).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(charge) => {
           charge.amount should be(Money(500L))
@@ -82,13 +82,13 @@ class PurchaseWorkflowSpec extends AsyncWordSpec with Matchers {
       }
     }
     "delete a credit card" in {
-      TestStripe.customers.sources.cards.delete(customerId.get, creditCardId.get).map {
+      TestStripe().customers.sources.cards.delete(customerId.get, creditCardId.get).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(deleted) => deleted.deleted should be(true)
       }
     }
     "delete the test customer" in {
-      TestStripe.customers.delete(customerId.get).map {
+      TestStripe().customers.delete(customerId.get).map {
         case Left(failure) => fail(s"Receive error response: ${failure.text} (${failure.code})")
         case Right(deleted) => deleted.deleted should be(true)
       }
