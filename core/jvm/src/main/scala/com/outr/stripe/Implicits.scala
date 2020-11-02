@@ -24,7 +24,7 @@ trait Implicits {
   protected implicit val moneyDecoder: Decoder[Money] = new Decoder[Money] {
     override def apply(c: HCursor): Result[Money] = Decoder.decodeLong(c) match {
       case Left(failure) => Left(failure)
-      case Right(l) => Right(Money(l))
+      case Right(l) => Right(Money(l, Money.defaultCurrency))
     }
   }
   protected implicit val transferDecoder: Decoder[Transfer] = deriveDecoder[Transfer]
@@ -113,7 +113,7 @@ trait Implicits {
     if (value != default) encoder.encode(key, value) else Map.empty
   }
 
-  protected implicit val moneyEncoder: MapEncoder[Money] = MapEncoder.singleValue[Money](_.pennies.toString)
+  protected implicit val moneyEncoder: MapEncoder[Money] = MapEncoder.singleValue[Money](_.pennies(Money.defaultCurrency).toString)
   protected implicit val stringEncoder: MapEncoder[String] = MapEncoder.singleValue[String](s => s)
   protected implicit val timestampFilterEncoder: MapEncoder[TimestampFilter] = new MapEncoder[TimestampFilter] {
     override def encode(key: String, value: TimestampFilter): Map[String, String] = List(

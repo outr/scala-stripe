@@ -41,8 +41,8 @@ class CustomerBankAccountsSupport(stripe: Stripe) extends Implicits {
              amount2: Option[Money] = None,
              verificationMethod: Option[String] = None): Future[Either[ResponseError, BankAccount]] = {
     val data = List(
-      amount1.map("amounts[]" -> _.pennies.toString),
-      amount2.map("amounts[]" -> _.pennies.toString),
+      amount1.map("amounts[]" -> _.pennies(Money.defaultCurrency).toString),
+      amount2.map("amounts[]" -> _.pennies(Money.defaultCurrency).toString),
       verificationMethod.map("verification_method" -> _)
     ).flatten
     stripe.post[BankAccount](s"customers/$customerId/sources/$bankAccountId/verify", QueryConfig.default, data: _*)
