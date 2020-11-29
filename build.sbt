@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 name := "scala-stripe"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.1.12SNAP_FRAC_DIG"
+version in ThisBuild := "1.1.12-SNAPSHOT"
 scalaVersion in ThisBuild := "2.13.3"
 crossScalaVersions in ThisBuild := List("2.13.3", "2.12.12")
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
