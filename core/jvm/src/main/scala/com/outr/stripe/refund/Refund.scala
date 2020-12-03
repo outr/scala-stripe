@@ -10,6 +10,9 @@ case class Refund(id: String,
                   created: Long,
                   currency: String,
                   metadata: Map[String, String],
+                  paymentIntent: Option[String],
                   reason: Option[String],
-                  receiptNumber: String,
-                  status: String)
+                  receiptNumber: Option[String],
+                  sourceTransferReversal: Option[String],
+                  status: String,
+                  transfer_reversal: Option[String])

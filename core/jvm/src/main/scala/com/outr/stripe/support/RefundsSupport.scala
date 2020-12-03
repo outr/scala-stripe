@@ -13,6 +13,7 @@ class RefundsSupport(stripe: Stripe) extends Implicits {
              refundApplicationFee: Boolean = false,
              reverseTransfer: Boolean = false): Future[Either[ResponseError, Refund]] = {
     val data = List(
+      write("charge", chargeId),
       write("amount", amount),
       write("metadata", metadata),
       write("reason", reason),
